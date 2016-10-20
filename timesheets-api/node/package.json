@@ -1,0 +1,24 @@
+{
+  "name": "timesheets-api",
+  "version": "1.0.0",
+  "description": "API used to add timesheet entries for employees and contractors",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/auth0-samples/auth0-pnp-timesheets.git"
+  },
+  "author": "Maria Paktiti <maria@auth0.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/auth0-samples/auth0-pnp-timesheets/issues"
+  },
+  "homepage": "https://github.com/auth0-samples/auth0-pnp-timesheets#readme",
+  "dependencies": {
+    "auth0-api-jwt-rsa-validation": "0.0.1",
+    "express": "^4.14.0",
+    "express-jwt": "^5.1.0"
+  }
+}
