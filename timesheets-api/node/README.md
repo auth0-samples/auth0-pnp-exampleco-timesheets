@@ -7,19 +7,19 @@ This folder includes the API implementation using Node.js and the [Express](http
 - Auth0 account
 - Node.js v6.6.0
 
-## Deploy & Run
-Open a terminal, navigate to the API's directory (`node`) and run:
-
-```
-node server
-```
-
 ## Set the configuration values
 
 You should set the following values at the `server.js`:
 
 - `YOUR-AUTH0-DOMAIN`: Set this to the value of your Auth0 Domain. You can retrieve it from the *Settings* of your Client at the [Auth0 Dashboard](https://manage.auth0.com/#/clients).
 - `YOUR-API-IDENTIFIER`: Set this to the value of your API Identifier. You can retrieve it from the *Settings* of your API at the [Auth0 Dashboard](https://manage.auth0.com/#/apis).
+
+## Deploy & Run
+Open a terminal, navigate to the API's directory (`node`) and run:
+
+```
+node server
+```
 
 ## Test
 
