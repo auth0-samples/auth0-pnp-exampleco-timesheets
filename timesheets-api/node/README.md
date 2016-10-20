@@ -31,10 +31,10 @@ To ask Auth0 for tokens for any of your authorized client applications, perform 
 
 ```json
 {
-  audience: "{YOUR_API_IDENTIFIER}",
-  grant_type: "client_credentials",
-  client_id: "{APP_CLIENT_ID}",
-  client_secret: "{APP_CLIENT_SECRET}"
+  "audience": "{YOUR_API_IDENTIFIER}",
+  "grant_type": "client_credentials",
+  "client_id": "{APP_CLIENT_ID}",
+  "client_secret": "{APP_CLIENT_SECRET}"
 }
 ```
 
@@ -57,12 +57,12 @@ The body payload should be in the following format:
 
 ```json
 {
-	'user_type': 'Employee',
-	'user_id': '007',
-	'year': 2016,
-	'week': 24,
-	'project': 'StoreZero',
-	'hours': 40
+	"user_type": "Employee",
+	"user_id": "007",
+	"year": 2016,
+	"week": 24,
+	"project": "StoreZero",
+	"hours": 40
 }
 ```
 
