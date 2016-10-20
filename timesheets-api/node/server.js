@@ -3,19 +3,26 @@ var express = require('express');
 var app = express();
 var jwt = require('express-jwt');
 var rsaValidation = require('auth0-api-jwt-rsa-validation');
+var bodyParser = require('body-parser'); // if you get errors try: npm install body-parser
 
 
 // validate the access token
 var jwtCheck = jwt({
 	secret: rsaValidation(),
 	algorithms: ['RS256'],
-  	issuer: "https://auth0pnp.auth0.com/", // https://${YOUR-AUTH0-DOMAIN}/
-  	audience: 'https://api.abcinc.com/timesheets' // should match the identifier you gave to your API
+  	issuer: "https://YOUR-AUTH0-DOMAIN/", // Update with your Auth0 Domain
+  	audience: 'YOUR-API-IDENTIFIER' // Update with the Identifier of your API
 });
 
 
 // enable the use of the jwtCheck middleware
 app.use(jwtCheck);
+
+// enable the use of request body parsing middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 
 
 // return error message for unauthorized requests
@@ -36,10 +43,11 @@ app.post('/timesheet', function(req, res){
 		}
 	}
 
-	//create the timesheet
+	//print the posted data
+	console.log(JSON.stringify(req.body, null, 2));
 
 	//send the response
-	res.status(200).send({message:'Timesheet created'});
+	res.status(200).send({message:"Timesheet created for " + req.body.user_type + ": " + req.body.user_id});
 })
 
 
