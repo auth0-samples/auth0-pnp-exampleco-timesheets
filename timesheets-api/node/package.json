@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/auth0-samples/auth0-pnp-timesheets.git"
   },
-  "author": "Maria Paktiti <maria@auth0.com>",
+  "author": "Auth0",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/auth0-samples/auth0-pnp-timesheets/issues"
