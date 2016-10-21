@@ -47,7 +47,7 @@ app.post('/timesheet', function(req, res){
 	console.log(JSON.stringify(req.body, null, 2));
 
 	//send the response
-	res.status(200).send({message:"Timesheet created for " + req.body.user_type + ": " + req.body.user_id});
+	res.status(201).send({message:"Timesheet created for " + req.body.user_type + ": " + req.body.user_id});
 })
 
 
