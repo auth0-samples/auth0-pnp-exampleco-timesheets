@@ -3,7 +3,7 @@ var express = require('express');
 var app = express();
 var jwt = require('express-jwt');
 var rsaValidation = require('auth0-api-jwt-rsa-validation');
-var bodyParser = require('body-parser'); // if you get errors try: npm install body-parser
+var bodyParser = require('body-parser');
 
 
 // validate the access token
@@ -14,9 +14,29 @@ var jwtCheck = jwt({
   	audience: 'YOUR-API-IDENTIFIER' // Update with the Identifier of your API
 });
 
+//middleware to check scopes
+var checkPermissions = function(req, res, next){
+	switch(req.path){
+		case '/timesheet':{
+			var permissions = ['create:timesheets'];
+			for(var i = 0; i < permissions.length; i++){
+				if(req.user.scope.includes(permissions[i])){
+          next();
+        } else {
+          res.status(403).send({message:'Forbidden'});
+        }
+			}
+			break;
+		}
+	}
+}
+
 
 // enable the use of the jwtCheck middleware
 app.use(jwtCheck);
+
+//enable the use of the checkPermissions middleware
+app.use(checkPermissions);
 
 // enable the use of request body parsing middleware
 app.use(bodyParser.json());
@@ -35,14 +55,6 @@ app.use(function (err, req, res, next) {
 
 // create timesheets API endpoint
 app.post('/timesheet', function(req, res){
-	//check if the token includes scope -> create:timesheets
-	var permissions = ['create:timesheets'];
-	for(var i = 0; i < permissions.length; i++){
-		if(!req.user.scope.includes(permissions[i])){
-			res.status(403).send({message:'Forbidden'});
-		}
-	}
-
 	//print the posted data
 	console.log(JSON.stringify(req.body, null, 2));
 
