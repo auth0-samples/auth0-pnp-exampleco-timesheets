@@ -23,19 +23,19 @@ app.use(jwt({
 
 //middleware to check scopes
 const checkPermissions = function(req, res, next){
-	switch(req.path){
-		case '/timesheet':{
-			var permissions = ['create:timesheets'];
-			for(var i = 0; i < permissions.length; i++){
-				if(req.user.scope.includes(permissions[i])){
-					next();
-				} else {
-					res.status(403).send({message:'Forbidden'});
-				}
-			}
-			break;
-		}
-	}
+  switch(req.path){
+    case '/timesheet':{
+      var permissions = ['create:timesheets'];
+      for(var i = 0; i < permissions.length; i++){
+        if(req.user.scope.includes(permissions[i])){
+          next();
+        } else {
+          res.status(403).send({message:'Forbidden'});
+        }
+      }
+      break;
+    }
+  }
 }
 
 //enable the use of the checkPermissions middleware
@@ -50,19 +50,19 @@ app.use(bodyParser.urlencoded({
 
 // return error message for unauthorized requests
 app.use(function (err, req, res, next) {
-	if (err.name === 'UnauthorizedError') {
-		res.status(401).json({message:'Missing or invalid token'});
-	}
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).json({message:'Missing or invalid token'});
+  }
 });
 
 
 // create timesheets API endpoint
 app.post('/timesheet', function(req, res){
-	//print the posted data
-	console.log(JSON.stringify(req.body, null, 2));
+  //print the posted data
+  console.log(JSON.stringify(req.body, null, 2));
 
-	//send the response
-	res.status(201).send({message:"Timesheet created for " + req.body.user_type + ": " + req.body.user_id});
+  //send the response
+  res.status(201).send({message:"Timesheet created for " + req.body.user_type + ": " + req.body.user_id});
 })
 
 
