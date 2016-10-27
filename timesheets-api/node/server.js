@@ -1,21 +1,28 @@
 // set dependencies
-var express = require('express');
-var app = express();
-var jwt = require('express-jwt');
-var rsaValidation = require('auth0-api-jwt-rsa-validation');
-var bodyParser = require('body-parser');
+const Express = require('express');
+const jwt = require('express-jwt');
+const jwksRsa = require('jwks-rsa');
+const bodyParser = require('body-parser');
 
+// Initialize the app
+const app = new Express();
+app.use(jwt({
+  // Dynamically provide a signing key based on the kid in the header and the singing keys provided by the JWKS endpoint
+  secret: jwksRsa.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: `https://{YOUR_AUTH0_DOMAIN}/.well-known/jwks.json`
+  }),
 
-// validate the access token
-var jwtCheck = jwt({
-	secret: rsaValidation(),
-	algorithms: ['RS256'],
-  	issuer: "https://YOUR-AUTH0-DOMAIN/", // Update with your Auth0 Domain
-  	audience: 'YOUR-API-IDENTIFIER' // Update with the Identifier of your API
-});
+  // Validate the audience and the issuer
+  audience: '{YOUR_API_IDENTIFIER}',
+  issuer: 'https://{YOUR_AUTH0_DOMAIN}/',
+  algorithms: [ 'RS256' ]
+}));
 
 //middleware to check scopes
-var checkPermissions = function(req, res, next){
+const checkPermissions = function(req, res, next){
 	switch(req.path){
 		case '/timesheet':{
 			var permissions = ['create:timesheets'];
@@ -30,10 +37,6 @@ var checkPermissions = function(req, res, next){
 		}
 	}
 }
-
-
-// enable the use of the jwtCheck middleware
-app.use(jwtCheck);
 
 //enable the use of the checkPermissions middleware
 app.use(checkPermissions);
