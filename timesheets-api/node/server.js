@@ -28,10 +28,10 @@ const checkPermissions = function(req, res, next){
 			var permissions = ['create:timesheets'];
 			for(var i = 0; i < permissions.length; i++){
 				if(req.user.scope.includes(permissions[i])){
-          next();
-        } else {
-          res.status(403).send({message:'Forbidden'});
-        }
+					next();
+				} else {
+					res.status(403).send({message:'Forbidden'});
+				}
 			}
 			break;
 		}
@@ -51,8 +51,8 @@ app.use(bodyParser.urlencoded({
 // return error message for unauthorized requests
 app.use(function (err, req, res, next) {
 	if (err.name === 'UnauthorizedError') {
-    	res.status(401).json({message:'Missing or invalid token'});
-  	}
+		res.status(401).json({message:'Missing or invalid token'});
+	}
 });
 
 
