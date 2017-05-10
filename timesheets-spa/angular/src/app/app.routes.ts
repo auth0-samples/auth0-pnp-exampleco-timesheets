@@ -5,6 +5,7 @@ import { AdminComponent } from './admin/admin.component';
 import { ProfileComponent } from './profile/profile.component';
 import { CallbackComponent } from './callback/callback.component';
 import { AuthGuardService as AuthGuard } from './auth/auth-guard.service';
+import { TimesheetListComponent } from './timesheet-list/timesheet-list.component';
 
 export const ROUTES: Routes = [
   { path: '', component: HomeComponent },
@@ -12,5 +13,6 @@ export const ROUTES: Routes = [
   { path: 'admin', component: AdminComponent, canActivate: [AuthGuard] },
   { path: 'ping', component: PingComponent },
   { path: 'callback', component: CallbackComponent },
+  { path: 'timesheets', component: TimesheetListComponent },
   { path: '**', redirectTo: '' }
 ];

@@ -17,6 +17,7 @@ import { AdminComponent } from './admin/admin.component';
 import { ProfileComponent } from './profile/profile.component';
 import { AuthGuardService } from './auth/auth-guard.service';
 import { CallbackComponent } from './callback/callback.component';
+import { TimesheetListComponent } from './timesheet-list/timesheet-list.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -32,7 +33,8 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     PingComponent,
     ProfileComponent,
     AdminComponent,
-    CallbackComponent
+    CallbackComponent,
+    TimesheetListComponent
   ],
   imports: [
     BrowserModule,
