@@ -1,45 +1,33 @@
-// set dependencies
-const Express = require('express');
+const express = require('express');
+const app = express();
 const jwt = require('express-jwt');
+const jwtAuthz = require('express-jwt-authz');
 const jwksRsa = require('jwks-rsa');
+const cors = require('cors');
 const bodyParser = require('body-parser');
+const timesheets = require('./fakeData').timesheets();
+require('dotenv').config();
 
-// Initialize the app
-const app = new Express();
-app.use(jwt({
-  // Dynamically provide a signing key based on the kid in the header and the singing keys provided by the JWKS endpoint
+if (!process.env.AUTH0_DOMAIN || !process.env.AUTH0_AUDIENCE) {
+  throw 'Make sure you have AUTH0_DOMAIN, and AUTH0_AUDIENCE in your .env file';
+}
+
+app.use(cors());
+
+const checkJwt = jwt({
+  // Dynamically provide a signing key based on the kid in the header and the singing keys provided by the JWKS endpoint.
   secret: jwksRsa.expressJwtSecret({
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 5,
-    jwksUri: `https://{YOUR_AUTH0_DOMAIN}/.well-known/jwks.json`
+    jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`
   }),
 
-  // Validate the audience and the issuer
-  audience: '{YOUR_API_IDENTIFIER}',
-  issuer: 'https://{YOUR_AUTH0_DOMAIN}/',
-  algorithms: [ 'RS256' ]
-}));
-
-//middleware to check scopes
-const checkPermissions = function(req, res, next){
-  switch(req.path){
-    case '/timesheet':{
-      var permissions = ['create:timesheets'];
-      for(var i = 0; i < permissions.length; i++){
-        if(req.user.scope.includes(permissions[i])){
-          next();
-        } else {
-          res.status(403).send({message:'Forbidden'});
-        }
-      }
-      break;
-    }
-  }
-}
-
-//enable the use of the checkPermissions middleware
-app.use(checkPermissions);
+  // Validate the audience and the issuer.
+  audience: process.env.AUTH0_AUDIENCE,
+  issuer: `https://${process.env.AUTH0_DOMAIN}/`,
+  algorithms: ['RS256']
+});
 
 // enable the use of request body parsing middleware
 app.use(bodyParser.json());
@@ -47,24 +35,21 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-
-// return error message for unauthorized requests
-app.use(function (err, req, res, next) {
-  if (err.name === 'UnauthorizedError') {
-    res.status(401).json({message:'Missing or invalid token'});
-  }
-});
-
-
 // create timesheets API endpoint
-app.post('/timesheet', function(req, res){
+app.post('/timesheet', checkJwt, jwtAuthz(['create:timesheets']), function(req, res){
   //print the posted data
   console.log(JSON.stringify(req.body, null, 2));
 
   //send the response
   res.status(201).send({message:"Timesheet created for " + req.body.user_type + ": " + req.body.user_id});
-})
+});
 
+// create timesheets API endpoint
+app.get('/timesheet', checkJwt, function(req, res){
+  //send the response
+  res.status(200).send(timesheets);
+});
 
 // launch the API Server at localhost:8080
 app.listen(8080);
+console.log('Listening on http://localhost:8080');
