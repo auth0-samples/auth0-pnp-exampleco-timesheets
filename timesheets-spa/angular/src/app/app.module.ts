@@ -11,7 +11,7 @@ import { ROUTES } from './app.routes';
 
 import { AuthService } from './auth/auth.service';
 import { PingComponent } from './ping/ping.component';
-
+import { TimesheetsService } from './services/timesheets.service';
 import { AuthHttp, AuthConfig } from 'angular2-jwt';
 import { AdminComponent } from './admin/admin.component';
 import { ProfileComponent } from './profile/profile.component';
@@ -49,7 +49,8 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
       provide: AuthHttp,
       useFactory: authHttpServiceFactory,
       deps: [Http, RequestOptions]
-    }
+    },
+    TimesheetsService
   ],
   bootstrap: [AppComponent]
 })
