@@ -16,7 +16,7 @@ export class AuthService {
       redirectUrl: AUTH_CONFIG.callbackURL,
       responseType: 'token id_token',
       params: {
-        scope: 'openid profile read:messages'
+        scope: 'openid profile read:timesheets create:timesheets'
       }
     }
   });
