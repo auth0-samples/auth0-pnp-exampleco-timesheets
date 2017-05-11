@@ -57,6 +57,7 @@ app.post('/timesheets', checkJwt, jwtAuthz(['create:timesheets']), function(req,
   // determine id for new timesheet
   var max = Math.max(...timesheets.map(elt => elt.id))
   timesheet.id = max + 1;
+  timesheet.user_id = req.user.sub;
 
   // append the timesheet
   timesheets.push(req.body);
@@ -67,8 +68,11 @@ app.post('/timesheets', checkJwt, jwtAuthz(['create:timesheets']), function(req,
 
 // create timesheets API endpoint
 app.get('/timesheets', checkJwt, function(req, res) {
+  // Get timesheet entries for this user
+  var userEntries = timesheets.filter(entry => entry.user_id === req.user.sub);
+
   //send the response
-  res.status(200).send(timesheets);
+  res.status(200).send(userEntries);
 });
 
 // launch the API Server at localhost:8080
