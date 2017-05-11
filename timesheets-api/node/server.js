@@ -35,17 +35,38 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
-// create timesheets API endpoint
-app.post('/timesheet', checkJwt, jwtAuthz(['create:timesheets']), function(req, res){
-  //print the posted data
-  console.log(JSON.stringify(req.body, null, 2));
+// Batch upload endpoint
+app.post('/timesheets/upload', checkJwt, jwtAuthz(['batch:upload']), function(req, res){
+  var timesheet = req.body;
+
+  // determine id for new timesheet
+  var max = Math.max(...timesheets.map(elt => elt.id))
+  timesheet.id = max + 1;
+
+  // append the timesheet
+  timesheets.push(req.body);
 
   //send the response
-  res.status(201).send({message:"Timesheet created for " + req.body.user_type + ": " + req.body.user_id});
+  res.status(201).send(timesheet);
 });
 
 // create timesheets API endpoint
-app.get('/timesheet', checkJwt, function(req, res){
+app.post('/timesheets', checkJwt, jwtAuthz(['create:timesheets']), function(req, res){
+  var timesheet = req.body;
+
+  // determine id for new timesheet
+  var max = Math.max(...timesheets.map(elt => elt.id))
+  timesheet.id = max + 1;
+
+  // append the timesheet
+  timesheets.push(req.body);
+
+  //send the response
+  res.status(201).send(timesheet);
+});
+
+// create timesheets API endpoint
+app.get('/timesheets', checkJwt, function(req, res) {
   //send the response
   res.status(200).send(timesheets);
 });

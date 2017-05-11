@@ -3,10 +3,10 @@ def main():
 	
 	# Configuration Values
 	DOMAIN = "YOUR-AUTH0-DOMAIN" # Update with your Auth0 Domain
-	AUDIENCE = "YOUR_API_IDENTIFIER" # Update with the Identifier of your API
+	AUDIENCE = "YOUR-API-IDENTIFIER" # Update with the Identifier of your API
 	CLIENT_ID = "YOUR_CLIENT_ID" # Update with the Client ID of your Non Interactive Client
 	CLIENT_SECRET = "YOUR_CLIENT_SECRET" # Update with the Client Secret of your Non Interactive Client
-	API_URL = "http://localhost:8080/timesheet"
+	API_URL = "http://localhost:8080/timesheets/upload"
 	GRANT_TYPE = "client_credentials" # OAuth 2.0 flow to use
 	
 	# Get an access token from Auth0
@@ -21,12 +21,10 @@ def main():
 	access_token = oauth['access_token']
 
 	#Post new timesheet to API
-	timesheet = {'user_type': 'Employee',
-				'user_id': '007',
-				'year': 2016,
-				'week': 24,
+	timesheet = {'user_id': '007',
+				'date': '2017-05-10T17:40:20.095Z',
 				'project': 'StoreZero',
-				'hours': 40}
+				'hours': 5}
 	req = urllib2.Request(API_URL, data = json.dumps(timesheet))
 	req.add_header('Authorization', 'Bearer ' + access_token)
 	req.add_header('Content-Type', 'application/json')
