@@ -11,13 +11,13 @@ export class TimesheetListComponent implements OnInit {
   timesheets: Array<any>;
   error: string;
 
-  constructor(private timesheetsService : TimesheetsService) { }
+  constructor(private timesheetsService: TimesheetsService) { }
 
   ngOnInit() {
     this.timesheetsService.getAllTimesheets()
       .subscribe(
-        data => this.timesheets = data,
-        error => this.error = error.statusText
+      data => this.timesheets = data,
+      error => this.error = error.statusText
       );
   }
 

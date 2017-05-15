@@ -10,12 +10,7 @@ export class TimesheetsService {
   constructor(public authHttp: AuthHttp) { }
 
   addTimesheet(model: NewTimesheetModel) {
-    this.authHttp.post('http://localhost:8080/timesheets', JSON.stringify(model))
-    .subscribe(
-      err => console.log(err),
-      () => console.log('Request Complete')
-    );
-    //return this.authHttp.post(, model);
+    return this.authHttp.post('http://localhost:8080/timesheets', JSON.stringify(model));
   }
 
   getAllTimesheets() {
