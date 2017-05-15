@@ -1,0 +1,22 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 col-sm-12">
+      <h1>New Timesheet Entry</h1>
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="name">Date</label>
+          <input type="text" class="form-control" id="date" type="date" required [(ngModel)]="model.date" name="date">
+        </div>
+        <div class="form-group">
+          <label for="alterEgo">Project</label>
+          <input type="text" class="form-control" id="project" [(ngModel)]="model.project" name="project">
+        </div>
+        <div class="form-group">
+          <label for="alterEgo">Hours</label>
+          <input type="text" class="form-control" type="number" id="hours" [(ngModel)]="model.hours" name="hours">
+        </div>
+        <button type="submit" class="btn btn-success">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>

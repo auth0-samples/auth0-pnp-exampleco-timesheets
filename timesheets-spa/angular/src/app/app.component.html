@@ -1,7 +1,7 @@
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">Auth0 - Angular 2</a>
+      <a class="navbar-brand" href="#">Timesheet System</a>
 
       <button
         class="btn btn-primary btn-margin"
@@ -12,21 +12,8 @@
       <button
         class="btn btn-primary btn-margin"
         *ngIf="auth.isAuthenticated()"
-        routerLink="/profile">
-          Profile
-      </button>
-
-      <button
-        class="btn btn-primary btn-margin"
-        *ngIf="auth.isAuthenticated() && auth.isAdmin()"
-        routerLink="/admin">
-          Admin Area
-      </button>
-
-      <button
-        class="btn btn-primary btn-margin"
-        routerLink="/ping">
-          Ping
+        routerLink="/timesheets">
+          My Timesheets
       </button>
 
       <button
