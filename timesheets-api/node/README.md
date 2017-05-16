@@ -9,13 +9,20 @@ This folder includes the API implementation using Node.js and the [Express](http
 
 ## Set the configuration values
 
-You should set the following values at the `server.js`:
+Rename the `.env.example` file to `.env`. Once you have renamed the file you should set the following values in this file:
 
-- `YOUR-AUTH0-DOMAIN`: Set this to the value of your Auth0 Domain. You can retrieve it from the *Settings* of your Client at the [Auth0 Dashboard](https://manage.auth0.com/#/clients).
-- `YOUR-API-IDENTIFIER`: Set this to the value of your API Identifier. You can retrieve it from the *Settings* of your API at the [Auth0 Dashboard](https://manage.auth0.com/#/apis).
+- `{DOMAIN}`: Set this to the value of your Auth0 Domain. You can retrieve it from the *Settings* of your Client at the [Auth0 Dashboard](https://manage.auth0.com/#/clients).
+- `{API_IDENTIFIER}`: Set this to the value of your API Identifier. You can retrieve it from the *Settings* of your API at the [Auth0 Dashboard](https://manage.auth0.com/#/apis).
 
 ## Deploy & Run
-Open a terminal, navigate to the API's directory (`node`) and run:
+
+Open a terminal and navigate to the folder in which this README.md is (`/timesheets-api/node`). Install the required packages for the Angular SPA by running:
+
+```
+npm i
+```
+
+Once the packages are installed, you can then run the server:
 
 ```
 node server
@@ -25,16 +32,18 @@ node server
 
 We assume that you already have an Auth0 account and you have configured your API in the dashboard.
 
+You can test the API in conjunction with either the CRON client (located in `/timesheets-cron/python`) or the SPA client (located in `/timesheets-spa/angular`). Alternatively you can test it using a tool with which you can make HTTP requests (such as Postman or CURL) but following the steps below.
+
 ### Get an Access Token
 
 To ask Auth0 for tokens for any of your authorized client applications, perform a POST operation to the `https://YOUR-AUTH-DOMAIN/oauth/token` endpoint with a payload in the following format:
 
 ```json
 {
-  "audience": "{YOUR_API_IDENTIFIER}",
+  "audience": "{API_IDENTIFIER}",
   "grant_type": "client_credentials",
-  "client_id": "{APP_CLIENT_ID}",
-  "client_secret": "{APP_CLIENT_SECRET}"
+  "client_id": "{CLIENT_ID}",
+  "client_secret": "{CLIENT_SECRET}"
 }
 ```
 
@@ -73,3 +82,32 @@ You should get a response like the following:
   "message": "Timesheet created for Employee: 007"
 }
 ```
+
+## What is Auth0?
+
+Auth0 helps you to:
+
+* Add authentication with [multiple authentication sources](https://docs.auth0.com/identityproviders), either social like **Google, Facebook, Microsoft Account, LinkedIn, GitHub, Twitter, Box, Salesforce, amont others**, or enterprise identity systems like **Windows Azure AD, Google Apps, Active Directory, ADFS or any SAML Identity Provider**.
+* Add authentication through more traditional **[username/password databases](https://docs.auth0.com/mysql-connection-tutorial)**.
+* Add support for **[linking different user accounts](https://docs.auth0.com/link-accounts)** with the same user.
+* Support for generating signed [Json Web Tokens](https://docs.auth0.com/jwt) to call your APIs and **flow the user identity** securely.
+* Analytics of how, when and where users are logging in.
+* Pull data from other sources and add it to the user profile, through [JavaScript rules](https://docs.auth0.com/rules).
+
+## Create a free Auth0 account
+
+1. Go to [Auth0](https://auth0.com/signup) and click Sign Up.
+2. Use Google, GitHub or Microsoft Account to login.
+
+## Issue Reporting
+
+If you have found a bug or if you have a feature request, please report them at this repository issues section. Please do not report security vulnerabilities on the public GitHub issue tracker. The [Responsible Disclosure Program](https://auth0.com/whitehat) details the procedure for disclosing security issues.
+
+## Author
+
+[Auth0](auth0.com)
+
+## License
+
+This project is licensed under the MIT license. See the [LICENSE](LICENSE.txt) file for more info.
+

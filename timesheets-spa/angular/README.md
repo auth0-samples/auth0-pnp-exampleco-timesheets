@@ -1,38 +1,33 @@
-# Auth0 Angular Authorization
+# Angular Single Page Application
 
-This sample demonstrates how to include user authorization in an Angular application with Auth0. The sample uses the Angular CLI.
+This folder includes the Single Page Application (SPA) implementation using [Angular](https://angular.io/).
 
-## Getting Started
+## Prerequisites
 
-If you haven't already done so, [sign up](https://auth0.com) for your free Auth0 account and create a new client in the [dashboard](https://manage.auth0.com). Find the **domain** and **client ID** from the settings area and add the URL for your application to the **Allowed Callback URLs** box. If you are using the server provided by the Angular CLI, that URL is `http://localhost:4200`.
+- Auth0 account
+- [Node Package Manager (NPM)](https://docs.npmjs.com/cli/version)
 
-You must ensure that the APIs section is enabled in your Auth0 dashboard. To do so, go to the [Advanced Settings](https://manage.auth0.com/#/account/advanced) area and verify that **Enable APIs Section** is switched on. Next, navigate to APIs in the sidebar and create a new API. The identifier for your API will be required later.
+## Set the configuration values
 
-Clone the repo or download it from the Angular quickstart page in Auth0's documentation. Install the Angular CLI and the dependencies for the app.
+Rename the `auth0-variables.ts.example` file in the `src/app/auth` folder to `auth0-variables.ts` Once you have renamed the file you should set the following values in your new `auth0-variables.ts` file:
 
-```bash
-npm install -g @angular/cli
-cd 05-Authorization
-npm install
+- `{DOMAIN}`: Set this to the value of your Auth0 Domain. You can retrieve it from the *Settings* of your Client at the [Auth0 Dashboard](https://manage.auth0.com/#/clients).
+- `{CLIENT_ID}`: Set this to the value for your Auth0 Client. You can retrieve it from the *Settings* of your Client at the [Auth0 Dashboard](https://manage.auth0.com/#/clients).
+- `{API_IDENTIFIER}`: Set this to the value of your API Identifier. You can retrieve it from the *Settings* of your API at the [Auth0 Dashboard](https://manage.auth0.com/#/apis).
+
+## Deploy & Run
+
+To test this application, you will need to also configure and run the corresponding API. Please see the [README.md](/timesheets-api/) for the API for instructions on how to configure and run the API.
+
+Once the API is running, you can open a terminal window to the folder in which this README.md is (`/timesheets-spa/angular`) and install the required packages for the Angular SPA by running:
+
+```
+npm i
 ```
 
-## Set the Client ID, Domain, and API URL
+Once the packages are installed, you can then run the Angular app:
 
-If you download the sample from the quickstart page, it will come pre-populated with the **client ID** and **domain** for your application. If you clone the repo directly from Github, rename the `auth0-variables.ts.example` file to `auth0-variables.ts` and provide the **client ID** and **domain** there. This file is located in `src/app/auth/`.
-
-You should also provide the identifier for the API you create in the Auth0 dashboard as your `apiUrl`.
-
-## Set Up the `.env` File
-
-In addition to the above-mentioned `auth0-variables.ts` file, a `.env` file is provided at the root of the application. This file provides your application's credentials to the small Node server located in `server.js`.
-
-This file has two values, `AUTH0_AUDIENCE` and `AUTH0_DOMAIN`. If you download this sample from the quickstart page, the value for `AUTH0_DOMAIN` will be populated automatically, but you will still need to populate `AUTH0_AUDIENCE` manually. The value for `AUTH0_AUDIENCE` is the identifier used for an API that you create in the Auth0 dashboard.
-
-## Run the Application
-
-The development server that comes with the Angular CLI can be used to serve the application.
-
-```bash
+```
 npm start
 ```
 
