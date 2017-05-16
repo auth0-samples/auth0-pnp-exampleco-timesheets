@@ -13,6 +13,7 @@ import { AuthService } from './auth/auth.service';
 import { TimesheetsService } from './services/timesheets.service';
 import { AuthHttp, AuthConfig } from 'angular2-jwt';
 import { AuthGuardService } from './auth/auth-guard.service';
+import { ProfileComponent } from './profile/profile.component';
 import { CallbackComponent } from './callback/callback.component';
 import { TimesheetListComponent } from './timesheet-list/timesheet-list.component';
 import { TimesheetAddComponent } from './timesheet-add/timesheet-add.component';
@@ -28,6 +29,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   declarations: [
     AppComponent,
     HomeComponent,
+    ProfileComponent,
     CallbackComponent,
     TimesheetListComponent,
     TimesheetAddComponent

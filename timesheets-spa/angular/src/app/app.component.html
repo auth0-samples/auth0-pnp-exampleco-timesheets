@@ -6,6 +6,7 @@
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li><a routerLink="/">Home</a></li>
+        <li><a *ngIf="auth.isAuthenticated()" routerLink="/profile">My Profile</a></li>
         <li><a *ngIf="auth.isAuthenticated()" routerLink="/timesheets">My Timesheets</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -13,7 +14,6 @@
         <li><a *ngIf="auth.isAuthenticated()" href="javascript:void(0)" (click)="auth.logout()">Log Out</a></li>
       </ul>
     </div>
-
   </div>
 </nav>
 
