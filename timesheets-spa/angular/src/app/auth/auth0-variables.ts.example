@@ -9,5 +9,5 @@ export const AUTH_CONFIG: AuthConfig = {
   clientID: '{CLIENT_ID}',
   domain: '{DOMAIN}',
   callbackURL: 'http://localhost:4200/callback',
-  apiUrl: '{API-IDENTIFIER}'
+  apiUrl: '{API_IDENTIFIER}'
 };
