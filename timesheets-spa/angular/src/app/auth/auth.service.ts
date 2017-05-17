@@ -1,77 +1,42 @@
 import { Injectable } from '@angular/core';
-import { Router, NavigationStart } from '@angular/router';
 import { AUTH_CONFIG } from './auth0-variables';
+import { Router } from '@angular/router';
 import 'rxjs/add/operator/filter';
-import Auth0Lock from 'auth0-lock';
-import jwt_decode from 'jwt-decode';
+import auth0 from 'auth0-js';
 
 @Injectable()
 export class AuthService {
 
-  lock = new Auth0Lock(AUTH_CONFIG.clientID, AUTH_CONFIG.domain, {
-    oidcConformant: true,
-    autoclose: true,
-    auth: {
-      audience: AUTH_CONFIG.apiUrl,
-      redirectUrl: AUTH_CONFIG.callbackURL,
-      responseType: 'token id_token',
-      params: {
-        scope: 'openid profile read:timesheets create:timesheets'
-      }
-    }
+  userProfile: any;
+  requestedScopes: string = 'openid profile read:timesheets create:timesheets';
+
+  auth0 = new auth0.WebAuth({
+    clientID: AUTH_CONFIG.clientID,
+    domain: AUTH_CONFIG.domain,
+    responseType: 'token id_token',
+    audience: AUTH_CONFIG.apiUrl,
+    redirectUri: AUTH_CONFIG.callbackURL,
+    scope: this.requestedScopes
   });
 
-  userProfile: any;
-
-  constructor(private router: Router) {}
+  constructor(public router: Router) {}
 
   public login(): void {
-    this.lock.show();
+    this.auth0.authorize();
   }
 
-  // Call this method in app.component
-  // if using path-based routing
   public handleAuthentication(): void {
-    this.lock.on('authenticated', (authResult) => {
+    this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
+        window.location.hash = '';
         this.setSession(authResult);
-        this.router.events
-          .filter(event => event instanceof NavigationStart)
-          .filter((event: NavigationStart) => event.url === '/callback')
-          .subscribe(() => {
-            this.router.navigate(['/']);
-          });
-      } else if (authResult && authResult.error) {
-        alert(`Error: ${authResult.error}`);
+        this.router.navigate(['/home']);
+      } else if (err) {
+        this.router.navigate(['/home']);
+        console.log(err);
+        alert(`Error: ${err.error}. Check the console for further details.`);
       }
     });
-  }
-
-  // Call this method in app.component
-  // if using hash-based routing
-  public handleAuthenticationWithHash(): void {
-    this
-      .router
-      .events
-      .filter(event => event instanceof NavigationStart)
-      .filter((event: NavigationStart) => (/access_token|id_token|error/).test(event.url))
-      .subscribe(() => {
-        this.lock.resumeAuth(window.location.hash, (error, authResult) => {
-          if (error) {
-            return console.log(error);
-          }
-          this.setSession(authResult);
-          this.router.navigate(['/']);
-        });
-    });
-  }
-
-  private setSession(authResult): void {
-    // Set the time that the access token will expire at
-    const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
-    localStorage.setItem('access_token', authResult.accessToken);
-    localStorage.setItem('id_token', authResult.idToken);
-    localStorage.setItem('expires_at', expiresAt);
   }
 
   public getProfile(cb): void {
@@ -81,7 +46,7 @@ export class AuthService {
     }
 
     const self = this;
-    this.lock.getUserInfo(accessToken, function(err, profile) {
+    this.auth0.client.userInfo(accessToken, (err, profile) => {
       if (profile) {
         self.userProfile = profile;
       }
@@ -89,14 +54,20 @@ export class AuthService {
     });
   }
 
-  getRole(): string {
-    const namespace = 'https://example.com';
-    const idToken = localStorage.getItem('id_token');
-    return jwt_decode(idToken)[`${namespace}/role`] || null;
-  }
+  private setSession(authResult): void {
+    // Set the time that the access token will expire at
+    const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
 
-  isAdmin(): boolean {
-    return this.getRole() === 'admin';
+    // If there is a value on the `scope` param from the authResult,
+    // use it to set scopes in the session for the user. Otherwise
+    // use the scopes as requested. If no scopes were requested,
+    // set it to nothing
+    const scopes = authResult.scope || this.requestedScopes || '';
+
+    localStorage.setItem('access_token', authResult.accessToken);
+    localStorage.setItem('id_token', authResult.idToken);
+    localStorage.setItem('expires_at', expiresAt);
+    localStorage.setItem('scopes', JSON.stringify(scopes));
   }
 
   public logout(): void {
@@ -104,7 +75,7 @@ export class AuthService {
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
-    this.userProfile = null;
+    localStorage.removeItem('scopes');
     // Go back to the home route
     this.router.navigate(['/']);
   }
@@ -116,4 +87,10 @@ export class AuthService {
     return new Date().getTime() < expiresAt;
   }
 
+  public userHasScopes(scopes: Array<string>): boolean {
+    const grantedScopes = JSON.parse(localStorage.getItem('scopes')).split(' ');
+    return scopes.every(scope => grantedScopes.includes(scope));
+  }
+
 }
+
