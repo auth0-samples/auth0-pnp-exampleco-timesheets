@@ -12,6 +12,7 @@ if (!process.env.AUTH0_DOMAIN || !process.env.AUTH0_AUDIENCE) {
   throw 'Make sure you have AUTH0_DOMAIN, and AUTH0_AUDIENCE in your .env file';
 }
 
+// Enable CORS
 app.use(cors());
 
 const checkJwt = jwt({
@@ -67,7 +68,7 @@ app.post('/timesheets', checkJwt, jwtAuthz(['create:timesheets']), function(req,
 });
 
 // create timesheets API endpoint
-app.get('/timesheets', checkJwt, function(req, res) {
+app.get('/timesheets', checkJwt, jwtAuthz(['read:timesheets']), function(req, res) {
   // Get timesheet entries for this user
   var userEntries = timesheets.filter(entry => entry.user_id === req.user.sub);
 
