@@ -58,7 +58,6 @@ app.post('/timesheets', checkJwt, jwtAuthz(['create:timesheets']), function(req,
   // determine id for new timesheet
   var max = Math.max(...timesheets.map(elt => elt.id))
   timesheet.id = max + 1;
-  //timesheet.user_id = req.user.sub;
   timesheet.user_id = req.user['https://api.abcinc.com/email'];
 
   // append the timesheet
