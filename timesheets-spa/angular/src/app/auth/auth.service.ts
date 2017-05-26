@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AUTH_CONFIG } from './auth0-variables';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import 'rxjs/add/operator/filter';
 import auth0 from 'auth0-js';
 
@@ -8,6 +9,7 @@ import auth0 from 'auth0-js';
 export class AuthService {
 
   userProfile: any;
+  refreshSubscription: any;
   requestedScopes: string = 'openid profile read:timesheets create:timesheets';
 
   auth0 = new auth0.WebAuth({
@@ -19,7 +21,7 @@ export class AuthService {
     scope: this.requestedScopes
   });
 
-  constructor(public router: Router) {}
+  constructor(public router: Router) { }
 
   public login(): void {
     this.auth0.authorize();
@@ -68,6 +70,7 @@ export class AuthService {
     localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
     localStorage.setItem('scopes', JSON.stringify(scopes));
+    this.scheduleRenewal();
   }
 
   public logout(): void {
@@ -76,6 +79,7 @@ export class AuthService {
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
     localStorage.removeItem('scopes');
+    this.unscheduleRenewal();
     // Go back to the home route
     this.router.navigate(['/']);
   }
@@ -92,5 +96,48 @@ export class AuthService {
     return scopes.every(scope => grantedScopes.includes(scope));
   }
 
+  public renewToken() {
+    this.auth0.renewAuth({
+      audience: AUTH_CONFIG.apiUrl,
+      redirectUri: AUTH_CONFIG.silentCallbackURL,
+      usePostMessage: true
+    }, (err, result) => {
+      if (err) {
+        //alert(`Could not get a new token using silent authentication (${err.error}).`);
+      } else {
+        //alert(`Successfully renewed auth!`);
+        this.setSession(result);
+      }
+    });
+  }
+
+  public scheduleRenewal() {
+    if (!this.isAuthenticated()) return;
+
+    const expiresAt = JSON.parse(window.localStorage.getItem('expires_at'));
+
+    const source = Observable.of(expiresAt).flatMap(
+      expiresAt => {
+
+        const now = Date.now();
+
+        // Use the delay in a timer to
+        // run the refresh at the proper time
+        return Observable.timer(Math.max(1, expiresAt - now));
+      });
+
+    // Once the delay time from above is
+    // reached, get a new JWT and schedule
+    // additional refreshes
+    source.subscribe(() => {
+      this.renewToken();
+      this.scheduleRenewal();
+    });
+  }
+
+  public unscheduleRenewal() {
+    if (!this.refreshSubscription) return;
+    this.refreshSubscription.unsubscribe();
+  }
 }
 
