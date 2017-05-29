@@ -123,15 +123,15 @@ export class AuthService {
 
         // Use the delay in a timer to
         // run the refresh at the proper time
-        return Observable.timer(Math.max(1, expiresAt - now));
+        var refreshAt = expiresAt - (1000 * 30); // Refresh 30 seconds before expiry
+        return Observable.timer(Math.max(1, refreshAt - now));
       });
 
     // Once the delay time from above is
     // reached, get a new JWT and schedule
     // additional refreshes
-    source.subscribe(() => {
+    this.refreshSubscription = source.subscribe(() => {
       this.renewToken();
-      this.scheduleRenewal();
     });
   }
 
