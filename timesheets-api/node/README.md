@@ -1,5 +1,14 @@
 # Node.js API
 
+## Overview
+
+This sample application is part of the Auth0 [Architecture Scenarios](https://auth0.com/docs/architecture-scenarios). For more information about implementing this application, please read either of the following Architecture Scenario documents:
+
+* [Server + API](https://auth0.com/docs/architecture-scenarios/application/server-api)
+* [SPA + API](https://auth0.com/docs/architecture-scenarios/application/spa-api)
+
+## Implementation
+
 This folder includes the API implementation using Node.js and the [Express](http://expressjs.com/) framework.
 
 ## Prerequisites

@@ -1,19 +1,27 @@
 # Angular Single Page Application
 
+## Overview
+
+This sample application is part of the Auth0 [Architecture Scenarios](https://auth0.com/docs/architecture-scenarios). For more information about implementing this application, please read the following Architecture Scenario document:
+
+* [SPA + API](https://auth0.com/docs/architecture-scenarios/application/spa-api)
+
+## Implementation
+
 This folder includes the Single Page Application (SPA) implementation using [Angular](https://angular.io/).
 
 ## Prerequisites
 
-- Auth0 account
-- [Node Package Manager (NPM)](https://docs.npmjs.com/cli/version)
+* Auth0 account
+* [Node Package Manager (NPM)](https://docs.npmjs.com/cli/version)
 
 ## Set the configuration values
 
 Rename the `auth0-variables.ts.example` file in the `src/app/auth` folder to `auth0-variables.ts` Once you have renamed the file you should set the following values in your new `auth0-variables.ts` file:
 
-- `{DOMAIN}`: Set this to the value of your Auth0 Domain. You can retrieve it from the *Settings* of your Client at the [Auth0 Dashboard](https://manage.auth0.com/#/clients).
-- `{CLIENT_ID}`: Set this to the value for your Auth0 Client. You can retrieve it from the *Settings* of your Client at the [Auth0 Dashboard](https://manage.auth0.com/#/clients).
-- `{API_IDENTIFIER}`: Set this to the value of your API Identifier. You can retrieve it from the *Settings* of your API at the [Auth0 Dashboard](https://manage.auth0.com/#/apis).
+* `{DOMAIN}`: Set this to the value of your Auth0 Domain. You can retrieve it from the *Settings* of your Client at the [Auth0 Dashboard](https://manage.auth0.com/#/clients).
+* `{CLIENT_ID}`: Set this to the value for your Auth0 Client. You can retrieve it from the *Settings* of your Client at the [Auth0 Dashboard](https://manage.auth0.com/#/clients).
+* `{API_IDENTIFIER}`: Set this to the value of your API Identifier. You can retrieve it from the *Settings* of your API at the [Auth0 Dashboard](https://manage.auth0.com/#/apis).
 
 ## Deploy & Run
 
@@ -21,13 +29,13 @@ To test this application, you will need to also configure and run the correspond
 
 Once the API is running, you can open a terminal window to the folder in which this README.md is (`/timesheets-spa/angular`) and install the required packages for the Angular SPA by running:
 
-```
+```text
 npm i
 ```
 
 Once the packages are installed, you can then run the Angular app:
 
-```
+```text
 npm start
 ```
 
