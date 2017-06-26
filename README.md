@@ -1,29 +1,13 @@
-# Auth0 Server + API Sample
-This is the sample project for the Server + API Patterns & Practices document.
+# Auth0 Architecture Scenario Samples
 
-In this scenario we will build a Timesheet API for a fictitious company named ABC Inc. The API is meant to allow various clients to add timesheet entries for an employee or a contractor.
+These sample applications serve as the implementation samples for the [Auth0 Architecture Scenarios](https://auth0.com/docs/architecture-scenarios). In these scenario we build a timesheet application for a fictitious company named ABC Inc. 
 
-The sample includes:
-- An [API](https://github.com/auth0-samples/auth0-pnp-abc-timesheets/tree/master/timesheets-api) with a `POST /timesheet` endpoint, used to add timesheet entries.
+For more information on the samples, please refer to the README in each sample folder.
 
-- A Cron job that adds timesheets using the `POST /timesheet` endpoint and an Access Token retrieved by Auth0, following the client's authentication.
+Also refer to the individual Architecture Scenario documents for more information:
 
-The implementation will use Auth0 and the OAuth 2.0 Client Credentials Grant flow.
-
-In order to keep this sample simple, and focus on the authentication and authorization part of the implementation, a single hard-coded timesheet entry is sent from the process to the API. Also, the result is printed in the console, something you wouldn't do with a server running process. The API parses the request and echoes some of the information back as response. 
-
-
-## Run the sample
-
-In order to use this sample you need to [sign up](https://auth0.com/signup) for you free Auth0 account.
-
-Each sample's README has information on the prerequisites and the configuration values that should be updated. Make sure you review them.
-
-To run the Node API and the Python process:
-
-- Navigate to the API's folder and run `node server`
-- Navigate to the Python folder and run `python cron.py`
-
+* [Server Client + API](https://auth0.com/docs/architecture-scenarios/application/server-api)
+* [SPA + API](https://auth0.com/docs/architecture-scenarios/application/spa-api)
 
 ## What is Auth0?
 

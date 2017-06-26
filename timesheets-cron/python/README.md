@@ -38,7 +38,7 @@ Make sure that the API is running. If you using our [sample Node API](https://gi
 node server
 ```
 
-> Refer to the [README](../../timesheets-api/node/README.md) for the server implementation for more information on running that sample
+> Also refer to the [README](../../timesheets-api/node/README.md) for the API implementation for more information on running that sample
 
 To run the python process, navigate to its directory and run:
 
