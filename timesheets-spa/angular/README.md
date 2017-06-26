@@ -17,7 +17,7 @@ Rename the `auth0-variables.ts.example` file in the `src/app/auth` folder to `au
 
 ## Deploy & Run
 
-To test this application, you will need to also configure and run the corresponding API. Please see the [README.md](/timesheets-api/) for the API for instructions on how to configure and run the API.
+To test this application, you will need to also configure and run the corresponding API. Please see the [README.md](../../timesheets-api/README.md) for the API for instructions on how to configure and run the API.
 
 Once the API is running, you can open a terminal window to the folder in which this README.md is (`/timesheets-spa/angular`) and install the required packages for the Angular SPA by running:
 
