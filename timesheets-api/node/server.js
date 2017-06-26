@@ -15,6 +15,7 @@ if (!process.env.AUTH0_DOMAIN || !process.env.AUTH0_AUDIENCE) {
 // Enable CORS
 app.use(cors());
 
+// Create middleware for checking the JWT
 const checkJwt = jwt({
   // Dynamically provide a signing key based on the kid in the header and the singing keys provided by the JWKS endpoint.
   secret: jwksRsa.expressJwtSecret({
@@ -30,7 +31,7 @@ const checkJwt = jwt({
   algorithms: ['RS256']
 });
 
-// enable the use of request body parsing middleware
+// Enable the use of request body parsing middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
