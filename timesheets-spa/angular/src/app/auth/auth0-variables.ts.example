@@ -12,6 +12,6 @@ export const AUTH_CONFIG: AuthConfig = {
   domain: '{DOMAIN}',
   callbackURL: 'http://localhost:4200/callback',
   silentCallbackURL: 'http://localhost:3001/silent',
-  audience: '{API_IDENTIFIER}'
+  audience: '{API_IDENTIFIER}',
   apiUrl: 'http://localhost:8080'
 };
