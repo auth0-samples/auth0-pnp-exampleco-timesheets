@@ -25,7 +25,7 @@ Rename the `.env.example` file to `.env`. Once you have renamed the file you sho
 
 ## Deploy & Run
 
-Open a terminal and navigate to the folder in which this README.md is (`/timesheets-api/node`). Install the required packages for the Angular SPA by running:
+Open a terminal and navigate to the folder in which this README.md is (`/timesheets-api/node`). Install the required packages for the Node.js API by running:
 
 ```
 npm i
