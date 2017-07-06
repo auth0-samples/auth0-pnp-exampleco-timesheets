@@ -34,6 +34,10 @@
 
         </activity>
 
+        <activity android:name="com.auth0.samples.TimeSheetActivity" />
+        <activity android:name="com.auth0.samples.Form" />
+
+
 
     </application>
 
