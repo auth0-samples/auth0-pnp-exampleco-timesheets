@@ -1,10 +1,15 @@
-package com.auth0.samples;
+package com.auth0.samples.activites;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -12,6 +17,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.auth0.samples.R;
+import com.auth0.samples.utils.CredentialsManager;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
@@ -23,7 +30,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -31,19 +37,18 @@ import java.util.Date;
  * Created by ej on 7/9/17.
  */
 
-public class Form extends Activity {
+public class FormActivity extends AppCompatActivity {
 
     private static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
 
     private static final String API_URL = "http://10.0.2.2:8080/timesheets";
 
-    private String accessToken;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.form);
-        accessToken = getIntent().getStringExtra("token");
+        setContentView(R.layout.form_activity);
+        Toolbar navToolbar = (Toolbar) findViewById(R.id.navToolbar);
+        setSupportActionBar(navToolbar);
 
         Button submitTimeSheetButton = (Button) findViewById(R.id.submitTimeSheetButton);
         final EditText editProjectName = (EditText) findViewById(R.id.editProjectName);
@@ -92,7 +97,7 @@ public class Form extends Activity {
         final Request.Builder reqBuilder = new Request.Builder()
                 .post(RequestBody.create(MEDIA_TYPE_JSON, postStr))
                 .url(API_URL)
-                .addHeader("Authorization", "Bearer " + accessToken);
+                .addHeader("Authorization", "Bearer " + CredentialsManager.getCredentials(this).getAccessToken());
 
         OkHttpClient client = new OkHttpClient();
         Request request = reqBuilder.build();
@@ -104,7 +109,7 @@ public class Form extends Activity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(Form.this, "An error occurred", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(FormActivity.this, "An error occurred", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -118,11 +123,10 @@ public class Form extends Activity {
                     public void run() {
                         if (response.isSuccessful()) {
                             clearForm((ViewGroup) findViewById(R.id.mainForm));
-                            Intent intent = new Intent(Form.this, TimeSheetActivity.class);
-                            intent.putExtra("token", accessToken);
-                            Form.this.startActivity(intent);
+                            Intent intent = new Intent(FormActivity.this, TimeSheetActivity.class);
+                            FormActivity.this.startActivity(intent);
                         } else {
-                            Toast.makeText(Form.this, "Timesheet creation failed.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(FormActivity.this, "Timesheet creation failed.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -140,5 +144,31 @@ public class Form extends Activity {
             if(view instanceof ViewGroup && (((ViewGroup)view).getChildCount() > 0))
                 clearForm((ViewGroup)view);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.form_action_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_view:
+                startActivity(new Intent(FormActivity.this, TimeSheetActivity.class));
+                break;
+            case R.id.action_profile:
+                startActivity(new Intent(FormActivity.this, UserActivity.class));
+                break;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+        return true;
     }
 }

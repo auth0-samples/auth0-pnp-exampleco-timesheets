@@ -1,4 +1,4 @@
-package com.auth0.samples;
+package com.auth0.samples.activites;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -16,6 +16,8 @@ import com.auth0.android.provider.AuthCallback;
 import com.auth0.android.provider.ResponseType;
 import com.auth0.android.provider.WebAuthProvider;
 import com.auth0.android.result.Credentials;
+import com.auth0.samples.R;
+import com.auth0.samples.utils.CredentialsManager;
 
 /**
  * Created by lbalmaceda on 5/10/17.
@@ -52,7 +54,7 @@ public class LoginActivity extends Activity {
                 .withScheme("demo")
                 .withAudience("https://api.abcinc.com/timesheets")
                 .withResponseType(ResponseType.CODE)
-                .withScope("create:timesheets read:timesheets batch:upload")
+                .withScope("create:timesheets read:timesheets openid profile email")
                 .start(LoginActivity.this, new AuthCallback() {
                     @Override
                     public void onFailure(@NonNull final Dialog dialog) {
@@ -76,14 +78,19 @@ public class LoginActivity extends Activity {
 
                     @Override
                     public void onSuccess(@NonNull final Credentials credentials) {
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                Intent intent = new Intent(LoginActivity.this, TimeSheetActivity.class);
-                                intent.putExtra("token", credentials.getAccessToken());
-                                startActivity(intent);
+                                Toast.makeText(LoginActivity.this, "Log In - Success", Toast.LENGTH_SHORT).show();
+//                                Intent intent = new Intent(LoginActivity.this, TimeSheetActivity.class);
+//                                intent.putExtra("token", credentials.getAccessToken());
+//                                intent.putExtra("idToken", credentials.getIdToken());
+//                                startActivity(intent);
                             }
                         });
+                        CredentialsManager.saveCredentials(LoginActivity.this, credentials);
+                        startActivity(new Intent(LoginActivity.this, TimeSheetActivity.class));
                     }
                 });
     }
