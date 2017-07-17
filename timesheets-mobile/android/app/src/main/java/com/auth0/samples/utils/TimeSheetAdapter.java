@@ -1,15 +1,16 @@
-package com.auth0.samples;
+package com.auth0.samples.utils;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.auth0.samples.R;
+import com.auth0.samples.models.TimeSheet;
+
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by ej on 7/10/17.
