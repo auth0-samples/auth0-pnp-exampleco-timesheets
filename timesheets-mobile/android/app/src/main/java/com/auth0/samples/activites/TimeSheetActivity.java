@@ -43,8 +43,6 @@ import java.util.ArrayList;
 
 public class TimeSheetActivity extends AppCompatActivity {
 
-    private static final String API_URL = "http://10.0.2.2:8080/timesheets";
-
     private ArrayList<TimeSheet> timesheets = new ArrayList<>();
 
     @Override
@@ -57,7 +55,6 @@ public class TimeSheetActivity extends AppCompatActivity {
         Auth0 auth0 = new Auth0(getString(R.string.auth0_client_id), getString(R.string.auth0_domain));
         auth0.setOIDCConformant(true);
 
-        UsersAPIClient usersClient = new UsersAPIClient(auth0, CredentialsManager.getCredentials(this).getIdToken());
         AuthenticationAPIClient authClient = new AuthenticationAPIClient(auth0);
 
         authClient.userInfo(CredentialsManager.getCredentials(this).getAccessToken())
@@ -81,7 +78,7 @@ public class TimeSheetActivity extends AppCompatActivity {
 
         final Request.Builder reqBuilder = new Request.Builder()
                 .get()
-                .url(API_URL)
+                .url(getString(R.string.api_url))
                 .addHeader("Authorization", "Bearer " + CredentialsManager.getCredentials(this).getAccessToken());
 
         OkHttpClient client = new OkHttpClient();
@@ -146,7 +143,6 @@ public class TimeSheetActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.timesheet_action_menu, menu);
         return super.onCreateOptionsMenu(menu);
@@ -162,10 +158,7 @@ public class TimeSheetActivity extends AppCompatActivity {
                 startActivity(new Intent(TimeSheetActivity.this, UserActivity.class));
                 break;
             default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
-
         }
         return true;
     }

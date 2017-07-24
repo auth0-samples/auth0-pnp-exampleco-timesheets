@@ -3,7 +3,6 @@ package com.auth0.samples.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.auth0.android.result.Credentials;
 import com.auth0.android.result.UserProfile;
 import com.auth0.samples.models.User;
 

@@ -83,10 +83,6 @@ public class LoginActivity extends Activity {
                             @Override
                             public void run() {
                                 Toast.makeText(LoginActivity.this, "Log In - Success", Toast.LENGTH_SHORT).show();
-//                                Intent intent = new Intent(LoginActivity.this, TimeSheetActivity.class);
-//                                intent.putExtra("token", credentials.getAccessToken());
-//                                intent.putExtra("idToken", credentials.getIdToken());
-//                                startActivity(intent);
                             }
                         });
                         CredentialsManager.saveCredentials(LoginActivity.this, credentials);
