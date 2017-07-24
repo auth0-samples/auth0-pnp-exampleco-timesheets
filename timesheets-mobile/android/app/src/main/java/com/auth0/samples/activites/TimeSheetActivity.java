@@ -47,19 +47,6 @@ public class TimeSheetActivity extends AppCompatActivity {
         Toolbar navToolbar = (Toolbar) findViewById(R.id.navToolbar);
         setSupportActionBar(navToolbar);
 
-        Auth0 auth0 = new Auth0(getString(R.string.auth0_client_id), getString(R.string.auth0_domain));
-        auth0.setOIDCConformant(true);
-
-        JWT jwt = new JWT(CredentialsManager.getCredentials(this).getIdToken());
-
-        User user = new User(
-                jwt.getClaim("email").asString(),
-                jwt.getClaim("name").asString(),
-                jwt.getClaim("picture").asString()
-        );
-
-        UserProfileManager.saveUserInfo(TimeSheetActivity.this, user);
-
         callAPI();
     }
 

@@ -12,12 +12,15 @@ import android.widget.Toast;
 
 import com.auth0.android.Auth0;
 import com.auth0.android.authentication.AuthenticationException;
+import com.auth0.android.jwt.JWT;
 import com.auth0.android.provider.AuthCallback;
 import com.auth0.android.provider.ResponseType;
 import com.auth0.android.provider.WebAuthProvider;
 import com.auth0.android.result.Credentials;
 import com.auth0.samples.R;
+import com.auth0.samples.models.User;
 import com.auth0.samples.utils.CredentialsManager;
+import com.auth0.samples.utils.UserProfileManager;
 
 /**
  * Created by lbalmaceda on 5/10/17.
@@ -78,7 +81,6 @@ public class LoginActivity extends Activity {
 
                     @Override
                     public void onSuccess(@NonNull final Credentials credentials) {
-
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -86,6 +88,15 @@ public class LoginActivity extends Activity {
                             }
                         });
                         CredentialsManager.saveCredentials(LoginActivity.this, credentials);
+                        JWT jwt = new JWT(CredentialsManager.getCredentials(LoginActivity.this).getIdToken());
+
+                        User user = new User(
+                                jwt.getClaim("email").asString(),
+                                jwt.getClaim("name").asString(),
+                                jwt.getClaim("picture").asString()
+                        );
+
+                        UserProfileManager.saveUserInfo(LoginActivity.this, user);
                         startActivity(new Intent(LoginActivity.this, TimeSheetActivity.class));
                     }
                 });

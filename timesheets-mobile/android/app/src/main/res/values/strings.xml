@@ -2,7 +2,7 @@
     <string name="app_name">ABC Timesheets</string>
     <string name="login">Log in</string>
 
-    <string name="auth0_client_id">YOUR_CLIENT_ID</string>
-    <string name="auth0_domain">YOUR_AUTH0_DOMAIN</string>
+    <string name="auth0_client_id">0T3TvxGJ3LmdvdpjqU3PIIgTuj9dgbRj</string>
+    <string name="auth0_domain">auth0pnp.auth0.com</string>
     <string name="api_url">http://10.0.2.2:8080/timesheets</string>
 </resources>
