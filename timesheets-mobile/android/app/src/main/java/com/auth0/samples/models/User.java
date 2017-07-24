@@ -5,20 +5,14 @@ package com.auth0.samples.models;
  */
 
 public class User {
-    private String id;
     private String email;
     private String name;
     private String pictureURL;
 
-    public User(String gId, String gEmail, String gName, String gPictureURL) {
-        this.id = gId;
+    public User(String gEmail, String gName, String gPictureURL) {
         this.email = gEmail;
         this.name = gName;
         this.pictureURL = gPictureURL;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public String getEmail() {
