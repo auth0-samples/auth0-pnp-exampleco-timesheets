@@ -9,18 +9,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.auth0.android.Auth0;
-import com.auth0.android.authentication.AuthenticationAPIClient;
-import com.auth0.android.authentication.AuthenticationException;
-import com.auth0.android.callback.BaseCallback;
-import com.auth0.android.management.UsersAPIClient;
-import com.auth0.android.result.UserProfile;
+import com.auth0.android.jwt.JWT;
 import com.auth0.samples.R;
+import com.auth0.samples.models.User;
 import com.auth0.samples.utils.CredentialsManager;
 import com.auth0.samples.utils.TimeSheetAdapter;
 import com.auth0.samples.models.TimeSheet;
@@ -55,21 +50,15 @@ public class TimeSheetActivity extends AppCompatActivity {
         Auth0 auth0 = new Auth0(getString(R.string.auth0_client_id), getString(R.string.auth0_domain));
         auth0.setOIDCConformant(true);
 
-        AuthenticationAPIClient authClient = new AuthenticationAPIClient(auth0);
+        JWT jwt = new JWT(CredentialsManager.getCredentials(this).getIdToken());
 
-        authClient.userInfo(CredentialsManager.getCredentials(this).getAccessToken())
-                .start(new BaseCallback<UserProfile, AuthenticationException>() {
+        User user = new User(
+                jwt.getClaim("email").asString(),
+                jwt.getClaim("name").asString(),
+                jwt.getClaim("picture").asString()
+        );
 
-                    @Override
-                    public void onSuccess(final UserProfile userInfo) {
-                        UserProfileManager.saveUserInfo(TimeSheetActivity.this, userInfo);
-                    }
-
-                    @Override
-                    public void onFailure(AuthenticationException error) {
-                        Log.d("AuthClient: ", String.valueOf(error));
-                    }
-                });
+        UserProfileManager.saveUserInfo(TimeSheetActivity.this, user);
 
         callAPI();
     }
