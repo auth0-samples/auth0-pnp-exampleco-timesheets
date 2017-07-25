@@ -9,18 +9,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.auth0.android.Auth0;
-import com.auth0.android.authentication.AuthenticationAPIClient;
-import com.auth0.android.authentication.AuthenticationException;
-import com.auth0.android.callback.BaseCallback;
-import com.auth0.android.management.UsersAPIClient;
-import com.auth0.android.result.UserProfile;
+import com.auth0.android.jwt.JWT;
 import com.auth0.samples.R;
+import com.auth0.samples.models.User;
 import com.auth0.samples.utils.CredentialsManager;
 import com.auth0.samples.utils.TimeSheetAdapter;
 import com.auth0.samples.models.TimeSheet;
@@ -43,8 +38,6 @@ import java.util.ArrayList;
 
 public class TimeSheetActivity extends AppCompatActivity {
 
-    private static final String API_URL = "http://10.0.2.2:8080/timesheets";
-
     private ArrayList<TimeSheet> timesheets = new ArrayList<>();
 
     @Override
@@ -54,26 +47,6 @@ public class TimeSheetActivity extends AppCompatActivity {
         Toolbar navToolbar = (Toolbar) findViewById(R.id.navToolbar);
         setSupportActionBar(navToolbar);
 
-        Auth0 auth0 = new Auth0(getString(R.string.auth0_client_id), getString(R.string.auth0_domain));
-        auth0.setOIDCConformant(true);
-
-        UsersAPIClient usersClient = new UsersAPIClient(auth0, CredentialsManager.getCredentials(this).getIdToken());
-        AuthenticationAPIClient authClient = new AuthenticationAPIClient(auth0);
-
-        authClient.userInfo(CredentialsManager.getCredentials(this).getAccessToken())
-                .start(new BaseCallback<UserProfile, AuthenticationException>() {
-
-                    @Override
-                    public void onSuccess(final UserProfile userInfo) {
-                        UserProfileManager.saveUserInfo(TimeSheetActivity.this, userInfo);
-                    }
-
-                    @Override
-                    public void onFailure(AuthenticationException error) {
-                        Log.d("AuthClient: ", String.valueOf(error));
-                    }
-                });
-
         callAPI();
     }
 
@@ -81,7 +54,7 @@ public class TimeSheetActivity extends AppCompatActivity {
 
         final Request.Builder reqBuilder = new Request.Builder()
                 .get()
-                .url(API_URL)
+                .url(getString(R.string.api_url))
                 .addHeader("Authorization", "Bearer " + CredentialsManager.getCredentials(this).getAccessToken());
 
         OkHttpClient client = new OkHttpClient();
@@ -146,7 +119,6 @@ public class TimeSheetActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.timesheet_action_menu, menu);
         return super.onCreateOptionsMenu(menu);
@@ -162,10 +134,7 @@ public class TimeSheetActivity extends AppCompatActivity {
                 startActivity(new Intent(TimeSheetActivity.this, UserActivity.class));
                 break;
             default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
-
         }
         return true;
     }

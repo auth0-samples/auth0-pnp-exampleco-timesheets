@@ -4,4 +4,5 @@
 
     <string name="auth0_client_id">YOUR_CLIENT_ID</string>
     <string name="auth0_domain">YOUR_AUTH0_DOMAIN</string>
+    <string name="api_url">http://10.0.2.2:8080/timesheets</string>
 </resources>

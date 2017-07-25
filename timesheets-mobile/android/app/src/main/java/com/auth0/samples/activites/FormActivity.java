@@ -41,8 +41,6 @@ public class FormActivity extends AppCompatActivity {
 
     private static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
 
-    private static final String API_URL = "http://10.0.2.2:8080/timesheets";
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,7 +94,7 @@ public class FormActivity extends AppCompatActivity {
 
         final Request.Builder reqBuilder = new Request.Builder()
                 .post(RequestBody.create(MEDIA_TYPE_JSON, postStr))
-                .url(API_URL)
+                .url(getString(R.string.auth0_client_id))
                 .addHeader("Authorization", "Bearer " + CredentialsManager.getCredentials(this).getAccessToken());
 
         OkHttpClient client = new OkHttpClient();
@@ -148,7 +146,6 @@ public class FormActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.form_action_menu, menu);
         return super.onCreateOptionsMenu(menu);
@@ -164,8 +161,6 @@ public class FormActivity extends AppCompatActivity {
                 startActivity(new Intent(FormActivity.this, UserActivity.class));
                 break;
             default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
 
         }
