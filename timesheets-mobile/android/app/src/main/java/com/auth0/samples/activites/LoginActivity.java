@@ -57,7 +57,7 @@ public class LoginActivity extends Activity {
                 .withScheme("demo")
                 .withAudience("https://api.abcinc.com/timesheets")
                 .withResponseType(ResponseType.CODE)
-                .withScope("create:timesheets read:timesheets openid profile email")
+                .withScope("create:timesheets read:timesheets openid profile email offline_access")
                 .start(LoginActivity.this, new AuthCallback() {
                     @Override
                     public void onFailure(@NonNull final Dialog dialog) {

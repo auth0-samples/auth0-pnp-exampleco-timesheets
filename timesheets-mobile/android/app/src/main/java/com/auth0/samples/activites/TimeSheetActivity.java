@@ -2,6 +2,8 @@ package com.auth0.samples.activites;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,7 +15,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.auth0.android.Auth0;
+import com.auth0.android.authentication.AuthenticationAPIClient;
+import com.auth0.android.authentication.AuthenticationException;
+import com.auth0.android.callback.BaseCallback;
 import com.auth0.android.jwt.JWT;
+import com.auth0.android.result.Credentials;
 import com.auth0.samples.R;
 import com.auth0.samples.models.User;
 import com.auth0.samples.utils.CredentialsManager;
@@ -31,6 +37,17 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by ej on 7/9/17.
@@ -46,7 +63,7 @@ public class TimeSheetActivity extends AppCompatActivity {
         setContentView(R.layout.timesheet_activity);
         Toolbar navToolbar = (Toolbar) findViewById(R.id.navToolbar);
         setSupportActionBar(navToolbar);
-
+        renewTokens();
         callAPI();
     }
 
@@ -89,6 +106,40 @@ public class TimeSheetActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    private void renewTokens() {
+        Auth0 auth0 = new Auth0(getString(R.string.auth0_client_id), getString(R.string.auth0_domain));
+        auth0.setOIDCConformant(true);
+        final AuthenticationAPIClient authAPIClient = new AuthenticationAPIClient(auth0);
+        final String refreshToken = CredentialsManager.getCredentials(TimeSheetActivity.this).getRefreshToken();
+
+        ScheduledExecutorService renewTask = Executors.newScheduledThreadPool(5);
+        Long period = CredentialsManager.getCredentials(TimeSheetActivity.this).getExpiresIn() - 10;
+
+        renewTask.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                authAPIClient.renewAuth(refreshToken)
+                        .addParameter("scope", "create:timesheets read:timesheets openid profile email")
+                        .start(new BaseCallback<Credentials, AuthenticationException>() {
+                            @Override
+                            public void onSuccess(Credentials credentials) {
+                                CredentialsManager.saveCredentials(TimeSheetActivity.this, credentials);
+                            }
+
+                            @Override
+                            public void onFailure(final AuthenticationException exception) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(TimeSheetActivity.this, "Error: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        });
+            }
+        }, period, period, TimeUnit.SECONDS);
     }
 
     private ArrayList<TimeSheet> processResults (Response response) {
