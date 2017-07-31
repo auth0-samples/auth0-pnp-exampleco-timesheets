@@ -1,6 +1,5 @@
-package com.auth0.samples.activites;
+package com.auth0.samples.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,8 +16,14 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.auth0.android.Auth0;
+import com.auth0.android.authentication.AuthenticationAPIClient;
+import com.auth0.android.authentication.storage.CredentialsManager;
+import com.auth0.android.authentication.storage.CredentialsManagerException;
+import com.auth0.android.authentication.storage.SharedPreferencesStorage;
+import com.auth0.android.callback.BaseCallback;
+import com.auth0.android.result.Credentials;
 import com.auth0.samples.R;
-import com.auth0.samples.utils.CredentialsManager;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
@@ -41,12 +46,33 @@ public class FormActivity extends AppCompatActivity {
 
     private static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
 
+    private String accessToken;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.form_activity);
         Toolbar navToolbar = (Toolbar) findViewById(R.id.navToolbar);
         setSupportActionBar(navToolbar);
+
+        Auth0 auth0 = new Auth0(getString(R.string.auth0_client_id), getString(R.string.auth0_domain));
+        auth0.setOIDCConformant(true);
+
+        AuthenticationAPIClient authAPIClient = new AuthenticationAPIClient(auth0);
+        SharedPreferencesStorage sharedPrefStorage = new SharedPreferencesStorage(this);
+
+        CredentialsManager credentialsManager = new CredentialsManager(authAPIClient, sharedPrefStorage);
+        credentialsManager.getCredentials(new BaseCallback<Credentials, CredentialsManagerException>() {
+            @Override
+            public void onSuccess(Credentials payload) {
+                accessToken = payload.getAccessToken();
+            }
+
+            @Override
+            public void onFailure(CredentialsManagerException error) {
+                Toast.makeText(FormActivity.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
         Button submitTimeSheetButton = (Button) findViewById(R.id.submitTimeSheetButton);
         final EditText editProjectName = (EditText) findViewById(R.id.editProjectName);
@@ -94,8 +120,8 @@ public class FormActivity extends AppCompatActivity {
 
         final Request.Builder reqBuilder = new Request.Builder()
                 .post(RequestBody.create(MEDIA_TYPE_JSON, postStr))
-                .url(getString(R.string.auth0_client_id))
-                .addHeader("Authorization", "Bearer " + CredentialsManager.getCredentials(this).getAccessToken());
+                .url(getString(R.string.api_url))
+                .addHeader("Authorization", "Bearer " + accessToken);
 
         OkHttpClient client = new OkHttpClient();
         Request request = reqBuilder.build();

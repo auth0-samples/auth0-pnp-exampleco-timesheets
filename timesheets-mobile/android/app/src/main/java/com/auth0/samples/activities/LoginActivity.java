@@ -1,4 +1,4 @@
-package com.auth0.samples.activites;
+package com.auth0.samples.activities;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -11,7 +11,12 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.auth0.android.Auth0;
+import com.auth0.android.authentication.AuthenticationAPIClient;
 import com.auth0.android.authentication.AuthenticationException;
+import com.auth0.android.authentication.storage.CredentialsManager;
+import com.auth0.android.authentication.storage.CredentialsManagerException;
+import com.auth0.android.authentication.storage.SharedPreferencesStorage;
+import com.auth0.android.callback.BaseCallback;
 import com.auth0.android.jwt.JWT;
 import com.auth0.android.provider.AuthCallback;
 import com.auth0.android.provider.ResponseType;
@@ -19,7 +24,6 @@ import com.auth0.android.provider.WebAuthProvider;
 import com.auth0.android.result.Credentials;
 import com.auth0.samples.R;
 import com.auth0.samples.models.User;
-import com.auth0.samples.utils.CredentialsManager;
 import com.auth0.samples.utils.UserProfileManager;
 
 /**
@@ -53,11 +57,15 @@ public class LoginActivity extends Activity {
         Auth0 auth0 = new Auth0(getString(R.string.auth0_client_id), getString(R.string.auth0_domain));
         auth0.setOIDCConformant(true);
 
+        AuthenticationAPIClient authAPIClient = new AuthenticationAPIClient(auth0);
+        SharedPreferencesStorage sharedPrefStorage = new SharedPreferencesStorage(this);
+        final CredentialsManager credentialsManager = new CredentialsManager(authAPIClient, sharedPrefStorage);
+
         WebAuthProvider.init(auth0)
                 .withScheme("demo")
                 .withAudience("https://api.abcinc.com/timesheets")
                 .withResponseType(ResponseType.CODE)
-                .withScope("create:timesheets read:timesheets openid profile email")
+                .withScope("create:timesheets read:timesheets openid profile email offline_access")
                 .start(LoginActivity.this, new AuthCallback() {
                     @Override
                     public void onFailure(@NonNull final Dialog dialog) {
@@ -87,16 +95,26 @@ public class LoginActivity extends Activity {
                                 Toast.makeText(LoginActivity.this, "Log In - Success", Toast.LENGTH_SHORT).show();
                             }
                         });
-                        CredentialsManager.saveCredentials(LoginActivity.this, credentials);
-                        JWT jwt = new JWT(CredentialsManager.getCredentials(LoginActivity.this).getIdToken());
 
-                        User user = new User(
-                                jwt.getClaim("email").asString(),
-                                jwt.getClaim("name").asString(),
-                                jwt.getClaim("picture").asString()
-                        );
+                        credentialsManager.saveCredentials(credentials);
+                        credentialsManager.getCredentials(new BaseCallback<Credentials, CredentialsManagerException>() {
+                            @Override
+                            public void onSuccess(Credentials payload) {
+                                JWT jwt = new JWT(payload.getIdToken());
+                                User user = new User(
+                                        jwt.getClaim("email").asString(),
+                                        jwt.getClaim("name").asString(),
+                                        jwt.getClaim("picture").asString()
+                                );
+                                UserProfileManager.saveUserInfo(LoginActivity.this, user);
+                            }
 
-                        UserProfileManager.saveUserInfo(LoginActivity.this, user);
+                            @Override
+                            public void onFailure(CredentialsManagerException error) {
+                                Toast.makeText(LoginActivity.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
                         startActivity(new Intent(LoginActivity.this, TimeSheetActivity.class));
                     }
                 });
