@@ -23,4 +23,8 @@ export class TimesheetsService {
     return this.authHttp.get(AUTH_CONFIG.apiUrl + '/approvals')
       .map(res => res.json())
   }
+
+  approveTimesheet(id: number) {
+    return this.authHttp.put(AUTH_CONFIG.apiUrl + '/approvals/' + id, {})
+  }
 }

@@ -20,4 +20,13 @@ export class ApprovalComponent implements OnInit {
         );
     }
 
+    approve(id: number) {
+      this.timesheetsService.approveTimesheet(id)
+      .subscribe(
+        data => this.timesheets = this.timesheets.filter(i => i.id !== id),
+        error => this.error = error.statusText
+      );
+      
+    }
+
 }
