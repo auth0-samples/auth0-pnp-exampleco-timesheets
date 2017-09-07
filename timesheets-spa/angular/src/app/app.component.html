@@ -8,6 +8,7 @@
         <li><a routerLink="/">Home</a></li>
         <li><a *ngIf="auth.isAuthenticated()" routerLink="/profile">My Profile</a></li>
         <li><a *ngIf="auth.isAuthenticated()" routerLink="/timesheets">My Timesheets</a></li>
+        <li><a *ngIf="auth.isAuthenticated() && auth.userHasScopes(['approve:timesheets'])" routerLink="/approval">Approve Timesheets</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a *ngIf="!auth.isAuthenticated()" href="javascript:void(0)" (click)="auth.login()">Log In</a></li>
