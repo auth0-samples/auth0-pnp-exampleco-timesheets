@@ -18,4 +18,9 @@ export class TimesheetsService {
     return this.authHttp.get(AUTH_CONFIG.apiUrl + '/timesheets')
       .map(res => res.json())
   }
+
+  getUnapprovedTimesheets() {
+    return this.authHttp.get(AUTH_CONFIG.apiUrl + '/approvals')
+      .map(res => res.json())
+  }
 }

@@ -60,6 +60,7 @@ app.post('/timesheets', checkJwt, jwtAuthz(['create:timesheets']), function(req,
   var max = Math.max(...timesheets.map(elt => elt.id))
   timesheet.id = max + 1;
   timesheet.user_id = req.user['https://api.abcinc.com/email'];
+  timesheet.approved = false;
 
   // append the timesheet
   timesheets.push(req.body);
@@ -75,6 +76,13 @@ app.get('/timesheets', checkJwt, jwtAuthz(['read:timesheets']), function(req, re
 
   //send the response
   res.status(200).send(userEntries);
+});
+
+app.get('/approvals', checkJwt, jwtAuthz(['approve:timesheets']), function(req, res) {
+  var unapprovedEntries = timesheets.filter(entry => entry.approved == false);
+
+  //send the response
+  res.status(200).send(unapprovedEntries);
 });
 
 // launch the API Server at localhost:8080

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import { TimesheetsService } from '../services/timesheets.service';
 @Component({
   selector: 'app-approval',
   templateUrl: './approval.component.html',
@@ -7,9 +7,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ApprovalComponent implements OnInit {
 
-  constructor() { }
+  timesheets: Array<any>;
+  error: string;
 
-  ngOnInit() {
-  }
+  constructor(private timesheetsService: TimesheetsService) { }
+  
+    ngOnInit() {
+      this.timesheetsService.getUnapprovedTimesheets()
+        .subscribe(
+        data => this.timesheets = data,
+        error => this.error = error.statusText
+        );
+    }
 
 }
