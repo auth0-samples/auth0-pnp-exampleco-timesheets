@@ -13,10 +13,12 @@ import { AuthService } from './auth/auth.service';
 import { TimesheetsService } from './services/timesheets.service';
 import { AuthHttp, AuthConfig } from 'angular2-jwt';
 import { AuthGuardService } from './auth/auth-guard.service';
+import { ScopeGuardService } from './auth/scope-guard.service';
 import { ProfileComponent } from './profile/profile.component';
 import { CallbackComponent } from './callback/callback.component';
 import { TimesheetListComponent } from './timesheet-list/timesheet-list.component';
 import { TimesheetAddComponent } from './timesheet-add/timesheet-add.component';
+import { ApprovalComponent } from './approval/approval.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -32,7 +34,8 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     ProfileComponent,
     CallbackComponent,
     TimesheetListComponent,
-    TimesheetAddComponent
+    TimesheetAddComponent,
+    ApprovalComponent
   ],
   imports: [
     BrowserModule,
@@ -43,6 +46,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   providers: [
     AuthService,
     AuthGuardService,
+    ScopeGuardService,
     {
       provide: AuthHttp,
       useFactory: authHttpServiceFactory,

@@ -1,0 +1,18 @@
+<div class="row">
+  <div class="col-md-12">
+    <table class="table table-striped">
+      <tr *ngFor="let timesheet of timesheets">
+        <td>{{ timesheet.user_id }}</td>
+        <td>{{ timesheet.project }}</td>
+        <td>{{ timesheet.date }}</td>
+        <td>{{ timesheet.hours }}</td>
+        <td>
+          <button class="btn btn-primary btn-margin btn-sm" (click)="approve(timesheet.id)">
+            Approve
+          </button>
+        </td>
+      </tr>
+    </table>
+    <div class="alert alert-danger" *ngIf="error">{{ error }}</div>
+  </div>
+</div>
