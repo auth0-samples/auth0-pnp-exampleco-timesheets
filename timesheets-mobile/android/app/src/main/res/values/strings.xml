@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ABC Timesheets</string>
+    <string name="app_name">ExampleCo Timesheets</string>
     <string name="login">Log in</string>
 
     <string name="auth0_client_id">YOUR_CLIENT_ID</string>

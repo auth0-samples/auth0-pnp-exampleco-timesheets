@@ -50,6 +50,9 @@ public class TimeSheetActivity extends AppCompatActivity {
         setContentView(R.layout.timesheet_activity);
         Toolbar navToolbar = (Toolbar) findViewById(R.id.navToolbar);
         setSupportActionBar(navToolbar);
+        TimeSheetAdapter adapter = new TimeSheetAdapter(this, R.id.timesheetList, timesheets);
+        ListView listView = (ListView) findViewById(R.id.timesheetList);
+        listView.setAdapter(adapter);
 
         Auth0 auth0 = new Auth0(getString(R.string.auth0_client_id), getString(R.string.auth0_domain));
         auth0.setOIDCConformant(true);
@@ -94,15 +97,11 @@ public class TimeSheetActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(final Response response) throws IOException {
-                timesheets = processResults(response);
-                final TimeSheetAdapter adapter = new TimeSheetAdapter(TimeSheetActivity.this, timesheets);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         if (response.isSuccessful()) {
-                            ListView listView = (ListView) findViewById(R.id.timesheetList);
-                            listView.setAdapter(adapter);
-                            adapter.addAll(timesheets);
+                            processResults(response);
                         } else {
                             Toast.makeText(TimeSheetActivity.this, "API call failed.", Toast.LENGTH_SHORT).show();
                         }
@@ -112,11 +111,9 @@ public class TimeSheetActivity extends AppCompatActivity {
         });
     }
 
-    private ArrayList<TimeSheet> processResults (Response response) {
-        ArrayList<TimeSheet> timesheets = new ArrayList<>();
+    private void processResults (Response response) {
         try {
             String jsonData = response.body().string();
-            if (response.isSuccessful()) {
                 JSONArray timesheetJSONArray = new JSONArray(jsonData);
                 for (int i = 0; i < timesheetJSONArray.length(); i++) {
                     JSONObject timesheetJSON = timesheetJSONArray.getJSONObject(i);
@@ -129,13 +126,9 @@ public class TimeSheetActivity extends AppCompatActivity {
                     TimeSheet timesheet = new TimeSheet(userID, projectName, dateStr, hours, id);
                     timesheets.add(timesheet);
                 }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
-        return timesheets;
     }
 
     @Override
