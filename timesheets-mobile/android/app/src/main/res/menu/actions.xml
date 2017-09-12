@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_new"
+        android:title="New Timesheet"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_view"
+        android:title="View Timesheets"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_approve"
+        android:title="Approve Timesheets"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_profile"
+        android:title="Profile"
+        app:showAsAction="never" />
+</menu>

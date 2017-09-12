@@ -1,73 +1,100 @@
 package com.auth0.samples.utils;
 
-import android.app.Activity;
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.auth0.samples.R;
+import com.auth0.samples.activities.ApproveActivity;
 import com.auth0.samples.models.TimeSheet;
 
 import java.util.ArrayList;
 
 /**
- * Created by ej on 7/10/17.
+ * Created by ej on 9/11/17.
  */
 
-public class TimeSheetAdapter extends ArrayAdapter<TimeSheet> {
+public class TimeSheetAdapter extends RecyclerView.Adapter<TimeSheetAdapter.ViewHolder> {
+    private Context context;
+    private ArrayList<TimeSheet> timesheetDataset;
+    private int layoutId;
 
-    private ArrayList<TimeSheet> timesheetData;
-    private Activity context;
-
-    public TimeSheetAdapter(Context context, int resource, ArrayList<TimeSheet> timesheets) {
-        super(context, resource, timesheets);
-        this.context = (Activity) context;
-        this.timesheetData = timesheets;
+    public TimeSheetAdapter(Context context, ArrayList<TimeSheet> dataset, int layoutId) {
+        this.context = context;
+        this.timesheetDataset = dataset;
+        this.layoutId = layoutId;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View view = convertView;
-        ViewHolder holder;
+    public TimeSheetAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                          int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(layoutId, parent, false);
 
-        if (view == null) {
-            LayoutInflater viewInflater = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = viewInflater.inflate(R.layout.item_entry, parent, false);
-
-            holder = new ViewHolder();
-            holder.id = (TextView) view.findViewById(R.id.tvUserID);
-            holder.date = (TextView) view.findViewById(R.id.tvDate);
-            holder.projectName = (TextView) view.findViewById(R.id.tvProjectName);
-            holder.hours = (TextView) view.findViewById(R.id.tvHours);
-            view.setTag(holder);
-        } else {
-            holder = (ViewHolder) view.getTag();
+        ViewHolder holder = new ViewHolder(view);
+        holder.cardView = view;
+        holder.userId = (TextView) view.findViewById(R.id.tvUserID);
+        holder.date = (TextView) view.findViewById(R.id.tvDate);
+        holder.projectName = (TextView) view.findViewById(R.id.tvProjectName);
+        holder.hours = (TextView) view.findViewById(R.id.tvHours);
+        holder.status = (ImageView) view.findViewById(R.id.ivStatus);
+        holder.approved = (TextView) view.findViewById(R.id.tvApproved);
+        if (layoutId == R.layout.item_timesheet_approve) {
+            holder.button = (Button) view.findViewById(R.id.approveButton);
         }
-
-        TimeSheet timesheet = timesheetData.get(position);
-
-        if (timesheet != null) {
-
-            if (holder.id != null && holder.date != null && holder.projectName != null && holder.hours != null) {
-                holder.id.setText(timesheet.getUserID());
-                holder.date.setText(timesheet.getDateString());
-                holder.projectName.setText(timesheet.getProjectName());
-                holder.hours.setText(Double.toString(timesheet.getHours()));
-            }
-
-        }
-
-        return view;
+        return holder;
     }
 
-    private static class ViewHolder {
-        TextView id;
-        TextView date;
-        TextView projectName;
-        TextView hours;
+    @Override
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        final TimeSheet timesheet = timesheetDataset.get(position);
+        if (holder.button != null) {
+            holder.button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(context instanceof ApproveActivity){
+                        ((ApproveActivity)context).approveTimeSheet(timesheet.getId(), position);
+                    }
+                }
+            });
+        }
+        holder.userId.setText(timesheet.getUserID());
+        holder.date.setText(timesheet.getDate());
+        holder.projectName.setText(timesheet.getProjectName());
+        holder.hours.setText(Double.toString(timesheet.getHours()));
+        if (timesheet.isApproved()) {
+            holder.approved.setText("Approved");
+            holder.status.setImageResource(R.drawable.circle_approved);
+        } else {
+            holder.approved.setText("Pending");
+            holder.status.setImageResource(R.drawable.circle_pending);
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return timesheetDataset.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
+        public View cardView;
+        public TextView userId;
+        public TextView date;
+        public TextView projectName;
+        public TextView hours;
+        public ImageView status;
+        public TextView approved;
+        public Button button;
+
+        public ViewHolder(View view) {
+            super(view);
+        }
     }
 }

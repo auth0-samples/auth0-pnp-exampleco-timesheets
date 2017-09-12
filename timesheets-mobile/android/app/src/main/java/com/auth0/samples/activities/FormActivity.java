@@ -3,12 +3,7 @@ package com.auth0.samples.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -16,16 +11,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.auth0.android.Auth0;
-import com.auth0.android.authentication.AuthenticationAPIClient;
-import com.auth0.android.authentication.storage.CredentialsManager;
-import com.auth0.android.authentication.storage.CredentialsManagerException;
-import com.auth0.android.authentication.storage.SharedPreferencesStorage;
-import com.auth0.android.callback.BaseCallback;
-import com.auth0.android.result.Credentials;
 import com.auth0.samples.R;
 import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
@@ -42,38 +29,14 @@ import java.util.Date;
  * Created by ej on 7/9/17.
  */
 
-public class FormActivity extends AppCompatActivity {
-
-    private static final MediaType MEDIA_TYPE_JSON = MediaType.parse("application/json; charset=utf-8");
-
-    private String accessToken;
+public class FormActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.form_activity);
-        Toolbar navToolbar = (Toolbar) findViewById(R.id.navToolbar);
-        setSupportActionBar(navToolbar);
 
-        Auth0 auth0 = new Auth0(getString(R.string.auth0_client_id), getString(R.string.auth0_domain));
-        auth0.setOIDCConformant(true);
-
-        AuthenticationAPIClient authAPIClient = new AuthenticationAPIClient(auth0);
-        SharedPreferencesStorage sharedPrefStorage = new SharedPreferencesStorage(this);
-
-        CredentialsManager credentialsManager = new CredentialsManager(authAPIClient, sharedPrefStorage);
-        credentialsManager.getCredentials(new BaseCallback<Credentials, CredentialsManagerException>() {
-            @Override
-            public void onSuccess(Credentials payload) {
-                accessToken = payload.getAccessToken();
-            }
-
-            @Override
-            public void onFailure(CredentialsManagerException error) {
-                Toast.makeText(FormActivity.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
+        setContentView(R.layout.activity_form);
+        initializeMenu();
         Button submitTimeSheetButton = (Button) findViewById(R.id.submitTimeSheetButton);
         final EditText editProjectName = (EditText) findViewById(R.id.editProjectName);
         final EditText editHours = (EditText) findViewById(R.id.editHours);
@@ -88,12 +51,13 @@ public class FormActivity extends AppCompatActivity {
 
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(year, month, day);
-
+            if (mAccessToken != null) {
                 postAPI(
                         editProjectName.getText().toString(),
                         calendar.getTime(),
                         editHours.getText().toString()
                 );
+            }
             }
         });
     }
@@ -120,8 +84,8 @@ public class FormActivity extends AppCompatActivity {
 
         final Request.Builder reqBuilder = new Request.Builder()
                 .post(RequestBody.create(MEDIA_TYPE_JSON, postStr))
-                .url(getString(R.string.api_url))
-                .addHeader("Authorization", "Bearer " + accessToken);
+                .url(getString(R.string.api_timesheets))
+                .addHeader("Authorization", "Bearer " + mAccessToken);
 
         OkHttpClient client = new OkHttpClient();
         Request request = reqBuilder.build();
@@ -140,8 +104,6 @@ public class FormActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(final Response response) throws IOException {
-                final String resBody = response.body().string();
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -168,28 +130,5 @@ public class FormActivity extends AppCompatActivity {
             if(view instanceof ViewGroup && (((ViewGroup)view).getChildCount() > 0))
                 clearForm((ViewGroup)view);
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.form_action_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_view:
-                startActivity(new Intent(FormActivity.this, TimeSheetActivity.class));
-                break;
-            case R.id.action_profile:
-                startActivity(new Intent(FormActivity.this, UserActivity.class));
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
-
-        }
-        return true;
     }
 }

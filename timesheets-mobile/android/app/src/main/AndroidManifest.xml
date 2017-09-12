@@ -27,7 +27,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="@string/auth0_domain"
+                    android:host="@string/auth0_tenant"
                     android:pathPrefix="/android/com.auth0.samples/callback"
                     android:scheme="demo" />
             </intent-filter>
@@ -37,6 +37,7 @@
         <activity android:name="com.auth0.samples.activities.TimeSheetActivity" />
         <activity android:name="com.auth0.samples.activities.FormActivity" />
         <activity android:name="com.auth0.samples.activities.UserActivity" />
+        <activity android:name="com.auth0.samples.activities.ApproveActivity" />
 
 
 
