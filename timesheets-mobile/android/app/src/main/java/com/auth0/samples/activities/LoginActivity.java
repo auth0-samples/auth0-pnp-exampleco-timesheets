@@ -54,7 +54,7 @@ public class LoginActivity extends Activity {
     }
 
     private void login() {
-        Auth0 auth0 = new Auth0(getString(R.string.auth0_client_id), getString(R.string.auth0_tenant));
+        Auth0 auth0 = new Auth0(getString(R.string.auth0_client_id), getString(R.string.auth0_domain));
         auth0.setOIDCConformant(true);
 
         AuthenticationAPIClient authAPIClient = new AuthenticationAPIClient(auth0);

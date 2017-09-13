@@ -51,7 +51,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Auth0 auth0 = new Auth0(getString(R.string.auth0_client_id), getString(R.string.auth0_tenant));
+        Auth0 auth0 = new Auth0(getString(R.string.auth0_client_id), getString(R.string.auth0_domain));
         auth0.setOIDCConformant(true);
         AuthenticationAPIClient authAPIClient = new AuthenticationAPIClient(auth0);
         SharedPreferencesStorage sharedPrefStorage = new SharedPreferencesStorage(this);
@@ -86,7 +86,7 @@ public class BaseActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(final Response response) throws IOException {
-                runOnUiThread(new Runnable() {
+                Thread thread = new Thread() {
                     @Override
                     public void run() {
                         if (response.isSuccessful()) {
@@ -99,7 +99,8 @@ public class BaseActivity extends AppCompatActivity {
                             }
                         }
                     }
-                });
+                };
+                thread.run();
             }
         });
     }
