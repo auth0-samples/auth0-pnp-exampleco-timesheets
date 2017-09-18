@@ -97,26 +97,15 @@ public class LoginActivity extends Activity {
                         });
 
                         credentialsManager.saveCredentials(credentials);
-                        credentialsManager.getCredentials(new BaseCallback<Credentials, CredentialsManagerException>() {
-                            @Override
-                            public void onSuccess(Credentials payload) {
-                                JWT jwt = new JWT(payload.getIdToken());
-                                String scopes = payload.getScope();
-                                Boolean isManager = scopes.contains("approve:timesheets");
-                                User user = new User(
-                                        jwt.getClaim("email").asString(),
-                                        jwt.getClaim("name").asString(),
-                                        jwt.getClaim("picture").asString(),
-                                        isManager
-                                );
-                                UserProfileManager.saveUserInfo(LoginActivity.this, user);
-                            }
-
-                            @Override
-                            public void onFailure(CredentialsManagerException error) {
-                                Toast.makeText(LoginActivity.this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        JWT jwt = new JWT(credentials.getIdToken());
+                        String scopes = credentials.getScope();
+                        User user = new User(
+                                jwt.getClaim("email").asString(),
+                                jwt.getClaim("name").asString(),
+                                jwt.getClaim("picture").asString(),
+                                credentials.getScope()
+                        );
+                        UserProfileManager.saveUserInfo(LoginActivity.this, user);
 
                         startActivity(new Intent(LoginActivity.this, TimeSheetActivity.class));
                     }

@@ -133,11 +133,11 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Boolean isManager = UserProfileManager.getUserInfo(this).isManager();
+        Boolean canApprove = UserProfileManager.getUserInfo(this).hasScope("approve:timesheets");
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.actions, menu);
         MenuItem item = menu.findItem(R.id.action_approve);
-        item.setVisible(isManager);
+        item.setVisible(canApprove);
         return super.onCreateOptionsMenu(menu);
     }
 

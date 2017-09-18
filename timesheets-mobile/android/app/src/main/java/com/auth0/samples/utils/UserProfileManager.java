@@ -16,7 +16,7 @@ public class UserProfileManager {
     private static final String EMAIL = "email";
     private static final String NAME = "name";
     private static final String PICTURE_URL = "picture_url";
-    private static final String IS_MANAGER = "is_manager";
+    private static final String SCOPE = "scope";
 
     public static void saveUserInfo(Context context, User userInfo) {
         SharedPreferences sp = context.getSharedPreferences(
@@ -26,7 +26,7 @@ public class UserProfileManager {
                 .putString(EMAIL, userInfo.getEmail())
                 .putString(NAME, userInfo.getName())
                 .putString(PICTURE_URL, userInfo.getPictureURL())
-                .putBoolean(IS_MANAGER, userInfo.isManager())
+                .putString(SCOPE, userInfo.getGrantedScope())
                 .apply();
     }
 
@@ -38,7 +38,7 @@ public class UserProfileManager {
                 sp.getString(EMAIL, null),
                 sp.getString(NAME, null),
                 sp.getString(PICTURE_URL, null),
-                sp.getBoolean(IS_MANAGER, false)
+                sp.getString(SCOPE, null)
         );
     }
 
@@ -50,7 +50,7 @@ public class UserProfileManager {
                 .putString(EMAIL, null)
                 .putString(NAME, null)
                 .putString(PICTURE_URL, null)
-                .putBoolean(IS_MANAGER, false)
+                .putString(SCOPE, null)
                 .apply();
     }
 }

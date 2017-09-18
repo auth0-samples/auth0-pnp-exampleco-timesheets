@@ -8,13 +8,13 @@ public class User {
     private String email;
     private String name;
     private String pictureURL;
-    private Boolean manager;
+    private String grantedScope;
 
-    public User(String email, String name, String pictureURL, Boolean manager) {
+    public User(String email, String name, String pictureURL, String grantedScope) {
         this.email = email;
         this.name = name;
         this.pictureURL = pictureURL;
-        this.manager = manager;
+        this.grantedScope = grantedScope;
     }
 
     public String getEmail() {
@@ -29,5 +29,9 @@ public class User {
         return pictureURL;
     }
 
-    public Boolean isManager() { return manager; }
+    public String getGrantedScope() { return grantedScope; }
+
+    public Boolean hasScope(String scope) {
+        return grantedScope.contains(scope);
+    }
 }
