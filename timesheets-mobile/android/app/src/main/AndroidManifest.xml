@@ -37,6 +37,7 @@
         <activity android:name="com.auth0.samples.activities.TimeSheetActivity" />
         <activity android:name="com.auth0.samples.activities.FormActivity" />
         <activity android:name="com.auth0.samples.activities.UserActivity" />
+        <activity android:name="com.auth0.samples.activities.ApproveActivity" />
 
 
 

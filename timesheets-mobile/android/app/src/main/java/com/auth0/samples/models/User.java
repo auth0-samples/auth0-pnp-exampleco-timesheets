@@ -8,11 +8,13 @@ public class User {
     private String email;
     private String name;
     private String pictureURL;
+    private Boolean manager;
 
-    public User(String gEmail, String gName, String gPictureURL) {
-        this.email = gEmail;
-        this.name = gName;
-        this.pictureURL = gPictureURL;
+    public User(String email, String name, String pictureURL, Boolean manager) {
+        this.email = email;
+        this.name = name;
+        this.pictureURL = pictureURL;
+        this.manager = manager;
     }
 
     public String getEmail() {
@@ -26,4 +28,6 @@ public class User {
     public String getPictureURL() {
         return pictureURL;
     }
+
+    public Boolean isManager() { return manager; }
 }

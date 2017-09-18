@@ -1,5 +1,8 @@
 package com.auth0.samples.models;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -7,29 +10,31 @@ import java.util.Date;
  */
 
 public class TimeSheet {
-    private String userID;
+    private String userId;
     private String projectName;
     private String date;
     private double hours;
-    private int ID;
+    private boolean status;
+    private String id;
 
-    public TimeSheet(String gUserID, String gProjectName, String gDate, double gHours, int gID) {
-        this.userID = gUserID;
-        this.projectName = gProjectName;
-        this.date = gDate;
-        this.hours = gHours;
-        this.ID = gID;
+    public TimeSheet(String userId, String projectName, String date, double hours, boolean status, String id) {
+        this.userId = userId;
+        this.projectName = projectName;
+        this.date = date;
+        this.hours = hours;
+        this.status = status;
+        this.id = id;
     }
 
     public String getUserID() {
-        return userID;
+        return userId;
     }
 
     public String getProjectName() {
         return projectName;
     }
 
-    public String getDateString() {
+    public String getDate() {
         return date;
     }
 
@@ -37,7 +42,9 @@ public class TimeSheet {
         return hours;
     }
 
-    public int getID() {
-        return ID;
+    public String getId() {
+        return id;
     }
+
+    public boolean isApproved() { return status; }
 }

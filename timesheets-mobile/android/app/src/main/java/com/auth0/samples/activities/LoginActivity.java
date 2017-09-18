@@ -35,7 +35,7 @@ public class LoginActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_activity);
+        setContentView(R.layout.activity_login);
         Button loginWithTokenButton = (Button) findViewById(R.id.loginButton);
         loginWithTokenButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,10 +101,13 @@ public class LoginActivity extends Activity {
                             @Override
                             public void onSuccess(Credentials payload) {
                                 JWT jwt = new JWT(payload.getIdToken());
+                                String scopes = payload.getScope();
+                                Boolean isManager = scopes.contains("approve:timesheets");
                                 User user = new User(
                                         jwt.getClaim("email").asString(),
                                         jwt.getClaim("name").asString(),
-                                        jwt.getClaim("picture").asString()
+                                        jwt.getClaim("picture").asString(),
+                                        isManager
                                 );
                                 UserProfileManager.saveUserInfo(LoginActivity.this, user);
                             }

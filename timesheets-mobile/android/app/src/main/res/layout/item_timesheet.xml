@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginLeft="4dp"
+        card_view:cardCornerRadius="4dp">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="6dp">
+        <TextView
+            android:id="@+id/tvProjectName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Project"
+            android:layout_margin="4dp"
+            android:textSize="18sp" />
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:text="Date"
+            android:layout_below="@+id/tvProjectName" />
+        <TextView
+            android:id="@+id/tvHours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:text="Hours"
+            android:layout_below="@+id/tvProjectName"
+            android:layout_alignParentRight="true" />
+        <TextView
+            android:id="@+id/tvUserID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:text="UserID"
+            android:layout_below="@id/tvDate"/>
+        <ImageView
+            android:id="@+id/ivStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/circle_approved"
+            android:layout_marginTop="11dp"
+            android:layout_below="@id/tvDate"
+            android:layout_toLeftOf="@+id/tvApproved"/>
+        <TextView
+            android:id="@+id/tvApproved"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:text="Approved"
+            android:gravity="right"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/tvHours" />
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
