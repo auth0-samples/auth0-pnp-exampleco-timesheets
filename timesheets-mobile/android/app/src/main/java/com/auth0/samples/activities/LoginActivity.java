@@ -63,7 +63,7 @@ public class LoginActivity extends Activity {
 
         WebAuthProvider.init(auth0)
                 .withScheme("demo")
-                .withAudience("https://api.abcinc.com/timesheets")
+                .withAudience("https://api.exampleco.com/timesheets")
                 .withResponseType(ResponseType.CODE)
                 .withScope("create:timesheets read:timesheets openid profile email offline_access")
                 .start(LoginActivity.this, new AuthCallback() {

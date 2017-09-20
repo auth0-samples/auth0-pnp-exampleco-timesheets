@@ -1,6 +1,6 @@
 # Auth0 Architecture Scenario Samples
 
-These sample applications serve as the implementation samples for the [Auth0 Architecture Scenarios](https://auth0.com/docs/architecture-scenarios). In these scenario we build a timesheet application for a fictitious company named ABC Inc. 
+These sample applications serve as the implementation samples for the [Auth0 Architecture Scenarios](https://auth0.com/docs/architecture-scenarios). In these scenario we build a timesheet application for a fictitious company named ExampleCo. 
 
 For more information on the samples, please refer to the README in each sample folder.
 
