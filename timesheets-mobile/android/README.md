@@ -8,14 +8,14 @@ This sample application is part of the Auth0 [Architecture Scenarios](https://au
 
 ## Implementation
 
-This folder includes the Mobile Application implementation using [Android](https://developer.android.com/index.html) which connects to the [Node.JS API implementation](https://github.com/auth0-samples/auth0-pnp-abc-timesheets/tree/master/timesheets-api/node).
+This folder includes the Mobile Application implementation using [Android](https://developer.android.com/index.html) which connects to the [Node.JS API implementation](https://github.com/auth0-samples/auth0-pnp-exampleco-timesheets/tree/master/timesheets-api/node).
 
 ## Prerequisites
 
 * Auth0 account ([sign up here!](https://auth0.com/signup))
 * [Android Studio](https://developer.android.com/studio/index.html)
 * [Nexus 5X virtual device running Marshmallow (API 23) Android 6.0](https://developer.android.com/studio/run/managing-avds.html)
-* [Node.JS API implementation](https://github.com/auth0-samples/auth0-pnp-abc-timesheets/tree/master/timesheets-api/node)
+* [Node.JS API implementation](https://github.com/auth0-samples/auth0-pnp-exampleco-timesheets/tree/master/timesheets-api/node)
 
 ## Set the configuration values
 
@@ -26,7 +26,7 @@ Update the following configuration values found in the `strings.xml` resource (`
 
 ## Start the Node.JS API
 
-Follow the instructions for setting up the [Node.JS API implementation](https://github.com/auth0-samples/auth0-pnp-abc-timesheets/tree/master/timesheets-api/node).
+Follow the instructions for setting up the [Node.JS API implementation](https://github.com/auth0-samples/auth0-pnp-exampleco-timesheets/tree/master/timesheets-api/node).
 
 After installing the required packages and configuring the `.env` file, start the server by navigating to the Node.JS API folder in your terminal and running `node server`.
 

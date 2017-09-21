@@ -32,7 +32,7 @@ You should set the following values at the `cron.py`:
 
 ## Deploy & Run
 
-Make sure that the API is running. If you using our [sample Node API](https://github.com/auth0-samples/auth0-pnp-abc-timesheets/tree/master/timesheets-api/node), open a terminal, navigate to the API's directory (`node`) and run:
+Make sure that the API is running. If you using our [sample Node API](https://github.com/auth0-samples/auth0-pnp-exampleco-timesheets/tree/master/timesheets-api/node), open a terminal, navigate to the API's directory (`node`) and run:
 
 ```
 node server
