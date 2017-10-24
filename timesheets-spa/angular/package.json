@@ -23,7 +23,7 @@
     "@angular/platform-browser-dynamic": "^4.0.0",
     "@angular/router": "^4.0.0",
     "angular2-jwt": "^0.2.2",
-    "auth0-js": "^8.6.0",
+    "auth0-js": "^9.0.0-beta.2",
     "bootstrap": "^3.3.7",
     "connect-static-file": "^1.2.0",
     "core-js": "^2.4.1",
@@ -34,9 +34,9 @@
     "express-jwt-authz": "^1.0.0",
     "jwks-rsa": "^1.1.1",
     "jwt-decode": "^2.2.0",
+    "npm-run-all": "^4.0.1",
     "rxjs": "^5.1.0",
-    "zone.js": "^0.8.4",
-    "npm-run-all": "^4.0.1"
+    "zone.js": "^0.8.4"
   },
   "devDependencies": {
     "@angular/cli": "1.0.0",
